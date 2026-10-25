@@ -8,6 +8,10 @@ code{word-break:break-all;color:#b6ff3b}#log{margin-top:16px;white-space:pre-wra
 <p>Set metadata ke <code>https://seolint.xyz/metadata/</code> (hanya wallet owner).</p>
 <button id="c">1. Connect wallet</button><button id="s">2. Set metadata (setBaseURI)</button><button id="w">Withdraw hasil mint</button>
 <div id="log"></div>
+<h1 style="margin-top:32px">Hadiah Audit Raid</h1>
+<p>Juara #1 minggu lalu (Senin–Minggu UTC) dapat 0.0015 BNB. Wallet owner tidak ikut.</p>
+<button id="pc">Hitung juara minggu lalu</button><button id="pp" disabled>Kirim 0.0015 BNB ke juara</button>
+<div id="plog" style="white-space:pre-wrap;font-size:14px"></div>
 <script>
 const C="0x438d4b4a867cDA7e8B1F673b5db7D8C5024493E1",OWNER="0x6961875eaf8418ced84bc433e6a17c1e3d0301c7";
 const DATA="0x55f804b30000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001d68747470733a2f2f73656f6c696e742e78797a2f6d657461646174612f000000";
@@ -21,4 +25,21 @@ try{const h=await ethereum.request({method:'eth_sendTransaction',params:[{from:a
 document.getElementById('c').onclick=connect;
 document.getElementById('s').onclick=()=>send(DATA,"setBaseURI");
 document.getElementById('w').onclick=()=>send("0x3ccfd60b","withdraw");
+const START=20752,RPC="https://bsc-mainnet.public.blastapi.io",BASE=[10,10,18,18,30,30,50,90];let KINDS="",champ=null;
+const plog=t=>document.getElementById('plog').textContent=t;
+function rhash(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0}h^=h>>>15;h=Math.imul(h,2246822507)>>>0;h^=h>>>13;return h>>>0}
+const utcDay=()=>Math.floor(Date.now()/86400000),weekStart=d=>d-((new Date(d*86400000).getUTCDay()+6)%7),dayLabel=d=>new Date(d*86400000).toISOString().slice(0,10);
+function walletDay(ids,d){const ks={};let sum=0;ids.forEach(id=>{const k=+KINDS[id-1];ks[k]=1;sum+=Math.round(BASE[k]*(0.5+(rhash("raid:"+d+":"+id)%1001)/1000))});return Object.keys(ks).length===8?Math.round(sum*1.25):sum}
+async function ecall(data){const r=await fetch(RPC,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'eth_call',params:[{to:C,data},'latest']})});return (await r.json()).result}
+async function findChamp(){plog("Membaca chain…");document.getElementById('pp').disabled=true;
+const html=await (await fetch('/?t='+Date.now())).text();KINDS=(html.match(/const KINDS = "(\d+)"/)||[])[1]||"";if(!KINDS){plog("Gagal membaca data jenis.");return}
+const n=parseInt(await ecall("0x18160ddd"),16);if(!n){plog("Belum ada yang mint, belum ada juara.");return}
+const by={};for(let id=1;id<=n;id++){const r=await ecall("0x6352211e"+id.toString(16).padStart(64,'0'));const o=("0x"+r.slice(26,66)).toLowerCase();if(o!==OWNER)(by[o]=by[o]||[]).push(id);if(id%50===0)plog("Membaca pemilik "+id+"/"+n+"…")}
+const ws=weekStart(utcDay())-7;if(ws<START){plog("Musim 1 mulai Senin 2026-10-26 (UTC). Juara pertama bisa dihitung mulai Senin 2026-11-02.");return}const board=Object.keys(by).map(o=>{let s=0;for(let d=Math.max(ws,START);d<=ws+6;d++)s+=walletDay(by[o],d);return{o,n:by[o].length,s}}).sort((a,b)=>b.s-a.s||b.n-a.n);
+if(!board.length){plog("Tidak ada pemegang selain owner.");return}champ=board[0];
+plog("Minggu "+dayLabel(ws)+" s/d "+dayLabel(ws+6)+" (UTC)\nJuara: "+champ.o+"\nAgen: "+champ.n+" · Skor: "+champ.s+"\n\nTop 3:\n"+board.slice(0,3).map((r,i)=>(i+1)+". "+r.o+" — "+r.s).join("\n"));document.getElementById('pp').disabled=false}
+async function payChamp(){if(!champ)return;if(!acc)await connect();if(!acc)return;if(acc.toLowerCase()!==OWNER&&!confirm("Ini bukan wallet owner. Tetap kirim?"))return;
+try{const h=await ethereum.request({method:'eth_sendTransaction',params:[{from:acc,to:champ.o,value:'0x'+(1500000000000000).toString(16)}]});plog("Hadiah 0.0015 BNB terkirim ke "+champ.o+"\nhttps://bscscan.com/tx/"+h)}catch(e){plog("Gagal: "+(e.message||e))}}
+document.getElementById('pc').onclick=()=>findChamp().catch(e=>plog("Gagal: "+(e.message||e)));
+document.getElementById('pp').onclick=payChamp;
 </script></body></html>

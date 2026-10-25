@@ -567,6 +567,11 @@
             </div>
           </div>
 
+          <div class="x-notice" id="rd-prize">
+            <p data-i18n="raidPrize">Weekly prize: the #1 wallet each week gets 0.0015 BNB, enough for one paid mint, sent by the SEOLint team after the week closes (Monday 00:00 UTC, 07:00 WIB).</p>
+            <p class="x-small" id="rd-champ"></p>
+          </div>
+
           <h3 data-i18n="raidBoard">This week's leaderboard</h3>
           <p class="x-small" id="rd-week"></p>
           <div class="table-wrap">
@@ -581,6 +586,7 @@
             <li data-i18n="raidR1">Base points per agent: Common 10, Uncommon 18, Rare 30, Epic 50, Legendary 90.</li>
             <li data-i18n="raidR2">Each day every agent rolls 0.5× to 1.5× on its base. A roll of 1.4× or more is a critical find.</li>
             <li data-i18n="raidR3">Hold all 8 kinds and the whole wallet scores +25%.</li>
+            <li data-i18n="raidR5">The prize goes to the wallet ranked #1 when the team pays out, using the agents it holds at that moment. The team's own wallet can't win.</li>
             <li data-i18n="raidR4">The week runs Monday to Sunday (UTC) and is scored from the agents each wallet holds now. Results are worked out from public chain data, so anyone can check them.</li>
           </ul>
         </section>
@@ -1238,9 +1244,13 @@
         }
         function boardData() {
           var d = utcDay(), ws = weekStart(d), by = holdings();
-          return Object.keys(by).map(function (o) {
+          return weekBoard(ws, d, by);
+        }
+        var RAID_OWNER = "0x6961875eaf8418ced84bc433e6a17c1e3d0301c7", RAID_START = 20752; /* season 1 starts Mon 2026-10-26 UTC */
+        function weekBoard(ws, we, by) {
+          return Object.keys(by).filter(function (o) { return o !== RAID_OWNER; }).map(function (o) {
             var ids = by[o], sum = 0;
-            for (var x = ws; x <= d; x++) sum += walletDay(ids, x).total;
+            for (var x = Math.max(ws, RAID_START); x <= we; x++) sum += walletDay(ids, x).total;
             return { o: o, n: ids.length, s: sum };
           }).sort(function (a, b) { return b.s - a.s || b.n - a.n; });
         }
@@ -1250,6 +1260,8 @@
           if (s === null) return msg(L("Reading the chain…", "正在读取链上数据…"));
           if (s === 0) return msg(L("No agents minted yet. Mint one to take the top spot.", "还没有代理被铸造。铸造一个即可登顶。"));
           if (RAID.scanned < s) return msg(L("Loading holders…", "正在加载持有者…"));
+          var lws = weekStart(utcDay()) - 7, last = lws >= RAID_START ? weekBoard(lws, lws + 6, holdings())[0] : null;
+          $("#rd-champ").textContent = utcDay() < RAID_START ? L("Season 1 starts Monday 26 Oct 2026 (UTC). The first prize goes out after Sunday 1 Nov.", "第 1 赛季于 2026 年 10 月 26 日周一（UTC）开始，首个奖励在 11 月 1 日周日之后发放。") : last ? L("Last week's champion (" + dayLabel(lws) + " to " + dayLabel(lws + 6) + "): " + short(last.o) + " with " + fmtN(last.s) + " pts.", "上周冠军（" + dayLabel(lws) + " 至 " + dayLabel(lws + 6) + "）：" + short(last.o) + "，" + fmtN(last.s) + " 分。") : "";
           var list = boardData().slice(0, 10), me = W.account ? W.account.toLowerCase() : "";
           tb.textContent = "";
           list.forEach(function (r, i) {
@@ -1336,7 +1348,7 @@
         /* page language: EN / 中文 */
         var ID = {
           navGallery: "图库", navMarket: "市场", navKinds: "种类", navRaid: "突袭",
-          raidEyebrow: "审计突袭 · 每日游戏", raidTitle: "派你的代理参加今日突袭", raidLead: "每天你的代理都会审计一个新的目标页面。越稀有的种类发现的问题越大、得分越高。分数按周累计，前 10 名钱包登上排行榜。", raidTarget: "今日目标", raidWalletLabel: "参加突袭的钱包", raidGo: "开始突袭", raidMine: "使用我的钱包", raidBoard: "本周排行榜", raidRulesTitle: "计分规则", colFinding: "发现", colScore: "得分", colRank: "排名", colWallet: "钱包", colAgents: "代理",
+          raidEyebrow: "审计突袭 · 每日游戏", raidTitle: "派你的代理参加今日突袭", raidLead: "每天你的代理都会审计一个新的目标页面。越稀有的种类发现的问题越大、得分越高。分数按周累计，前 10 名钱包登上排行榜。", raidTarget: "今日目标", raidWalletLabel: "参加突袭的钱包", raidGo: "开始突袭", raidMine: "使用我的钱包", raidBoard: "本周排行榜", raidRulesTitle: "计分规则", raidPrize: "每周奖励：每周排名第 1 的钱包将获得 0.0015 BNB（足够一次付费铸造），由 SEOLint 团队在每周结束后（UTC 周一 00:00）发放。", raidR5: "奖励发给团队发放时排名第 1 的钱包，按其当时持有的代理计算。团队自己的钱包不参与评奖。", colFinding: "发现", colScore: "得分", colRank: "排名", colWallet: "钱包", colAgents: "代理",
           raidR1: "每个代理的基础分：普通 10、罕见 18、稀有 30、史诗 50、传说 90。", raidR2: "每天每个代理在基础分上随机获得 0.5× 到 1.5× 倍率，1.4× 及以上为暴击。", raidR3: "集齐全部 8 种，整个钱包得分 +25%。", raidR4: "每周从周一到周日（UTC），按每个钱包当前持有的代理计分。结果由公开链上数据计算，任何人都可以核对。",
           heroTitle: "链上代理",
           heroSub: "来自 SEOLint World 的 10,000 个像素 SEO 代理，在 BNB Chain 上铸造。",
