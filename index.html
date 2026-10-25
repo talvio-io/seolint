@@ -159,6 +159,13 @@
       .x-market th[scope="row"] { font-family: var(--x-mono); }
       .x-result { padding: 14px; border: 2px solid var(--x-lime); background: var(--x-bg); font: 400 14px/1.6 var(--x-mono); }
       .x-result[hidden] { display: none; }
+      .x-kcell { display: flex; align-items: center; gap: 10px; }
+      .x-kcell img { width: 40px; height: 40px; flex: none; image-rendering: pixelated; border: 2px solid var(--x-line); background: var(--x-bg); }
+      .x-market h3 { color: var(--x-lime); }
+      .x-market td .x-btn { white-space: nowrap; }
+      .x-tile figcaption a { color: var(--x-dim); display: flex; align-items: center; min-height: var(--tap); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .x-tile figcaption a:hover { color: var(--x-lime); }
+      .x-tile figcaption .is-minted { color: var(--x-lime); }
 
       /* toast */
       .x-toast { position: fixed; left: 50%; bottom: 20px; z-index: 50; transform: translate(-50%, 140%); padding: 14px 18px; max-width: calc(100% - 40px); font: 400 12px/1.5 var(--x-pixel); background: var(--x-lime); color: #0b1020; border: 3px solid #000; box-shadow: 5px 5px 0 #000; transition: transform var(--dur-quick) var(--ease-out); }
@@ -313,17 +320,17 @@
             <div class="x-panel" style="box-shadow:none;padding:0;border:0">
               <h2 data-i18n="supplyTitle">How the 10,000 split by kind</h2>
               <div class="x-supply" aria-hidden="true">
-                <span class="x-rar--common" style="width:24%"></span><span class="x-rar--common" style="width:20%"></span><span class="x-rar--uncommon" style="width:15%"></span><span class="x-rar--uncommon" style="width:13%"></span><span class="x-rar--rare" style="width:10%"></span><span class="x-rar--rare" style="width:9%"></span><span class="x-rar--epic" style="width:6%"></span><span class="x-rar--legendary" style="width:3%"></span>
+                <span class="x-rar--common" style="width:23.74%"></span><span class="x-rar--common" style="width:20.45%"></span><span class="x-rar--uncommon" style="width:15.29%"></span><span class="x-rar--uncommon" style="width:12.77%"></span><span class="x-rar--rare" style="width:9.81%"></span><span class="x-rar--rare" style="width:9.01%"></span><span class="x-rar--epic" style="width:5.7%"></span><span class="x-rar--legendary" style="width:3.23%"></span>
               </div>
               <ul class="x-supply-key">
-                <li>Crawler <span class="x-rar x-rar--common">2,400</span></li>
-                <li>Meta Tagger <span class="x-rar x-rar--common">2,000</span></li>
-                <li>Schema Smith <span class="x-rar x-rar--uncommon">1,500</span></li>
-                <li>Backlink Hunter <span class="x-rar x-rar--uncommon">1,300</span></li>
-                <li>Vitals Medic <span class="x-rar x-rar--rare">1,000</span></li>
-                <li>Canonical Keeper <span class="x-rar x-rar--rare">900</span></li>
-                <li>Sitemap Cartographer <span class="x-rar x-rar--epic">600</span></li>
-                <li>Regression Sentinel <span class="x-rar x-rar--legendary">300</span></li>
+                <li>Crawler <span class="x-rar x-rar--common">2,374</span></li>
+                <li>Meta Tagger <span class="x-rar x-rar--common">2,045</span></li>
+                <li>Schema Smith <span class="x-rar x-rar--uncommon">1,529</span></li>
+                <li>Backlink Hunter <span class="x-rar x-rar--uncommon">1,277</span></li>
+                <li>Vitals Medic <span class="x-rar x-rar--rare">981</span></li>
+                <li>Canonical Keeper <span class="x-rar x-rar--rare">901</span></li>
+                <li>Sitemap Cartographer <span class="x-rar x-rar--epic">570</span></li>
+                <li>Regression Sentinel <span class="x-rar x-rar--legendary">323</span></li>
               </ul>
               <div><a class="x-btn x-btn--ghost" href="#kinds" data-i18n="seeKinds">See every kind ↓</a></div>
             </div>
@@ -333,20 +340,9 @@
           <div class="x-tabpanel" role="tabpanel" id="p-latest" aria-labelledby="t-latest" hidden>
             <div class="x-panel" style="box-shadow:none;padding:0;border:0">
               <h2 data-i18n="tabLatest">Latest minted</h2>
-              <div class="x-tiles x-px">
-                <figure class="x-tile"><img src="vitals-medic.png" alt="Vitals Medic" loading="lazy" /><figcaption><b>#7342</b><span>0x8a3f…12bc</span></figcaption></figure>
-                <figure class="x-tile"><img src="crawler.png" alt="Crawler" loading="lazy" /><figcaption><b>#7341</b><span>0x41de…9a07</span></figcaption></figure>
-                <figure class="x-tile"><img src="meta-tagger.png" alt="Meta Tagger" loading="lazy" /><figcaption><b>#7340</b><span>0xc9b2…44f1</span></figcaption></figure>
-                <figure class="x-tile"><img src="crawler.png" alt="Crawler" loading="lazy" /><figcaption><b>#7339</b><span>0x8a3f…12bc</span></figcaption></figure>
-                <figure class="x-tile"><img src="schema-smith.png" alt="Schema Smith" loading="lazy" /><figcaption><b>#7338</b><span>0x07ae…d3c8</span></figcaption></figure>
-                <figure class="x-tile"><img src="backlink-hunter.png" alt="Backlink Hunter" loading="lazy" /><figcaption><b>#7337</b><span>0xf210…6be5</span></figcaption></figure>
-                <figure class="x-tile"><img src="meta-tagger.png" alt="Meta Tagger" loading="lazy" /><figcaption><b>#7336</b><span>0x5c8d…0e2a</span></figcaption></figure>
-                <figure class="x-tile"><img src="canonical-keeper.png" alt="Canonical Keeper" loading="lazy" /><figcaption><b>#7335</b><span>0x9e47…b871</span></figcaption></figure>
-                <figure class="x-tile"><img src="crawler.png" alt="Crawler" loading="lazy" /><figcaption><b>#7334</b><span>0x2b61…c09d</span></figcaption></figure>
-                <figure class="x-tile"><img src="sitemap-cartographer.png" alt="Sitemap Cartographer" loading="lazy" /><figcaption><b>#7333</b><span>0xd4f9…7a13</span></figcaption></figure>
-                <figure class="x-tile"><img src="regression-sentinel.png" alt="Regression Sentinel" loading="lazy" /><figcaption><b>#7332</b><span>0x63a0…f5e6</span></figcaption></figure>
-                <figure class="x-tile"><img src="schema-smith.png" alt="Schema Smith" loading="lazy" /><figcaption><b>#7331</b><span>0xab17…2d94</span></figcaption></figure>
-              </div>
+              <p class="x-small" id="latest-status" role="status" aria-live="polite">Reading the chain…</p>
+              <div id="latest-empty" hidden><a class="x-btn" href="#market" data-i18n="toMarket">Go to the Market</a></div>
+              <div class="x-tiles x-px" id="latest-grid"></div>
             </div>
           </div>
 
@@ -359,7 +355,7 @@
                 <input class="x-input" id="lookup-addr" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
               </div>
               <div><button class="x-btn" type="submit" data-i18n="lookupBtn">Look up</button></div>
-              <p class="x-result" id="lookup-result" role="status" hidden>This wallet holds 3 agents: #0412 Crawler, #2210 Schema Smith, #6981 Regression Sentinel.</p>
+              <p class="x-result" id="lookup-result" role="status" aria-live="polite" hidden></p>
             </form>
           </div>
         </section>
@@ -375,7 +371,7 @@
               <img class="x-px" src="crawler.png" alt="Crawler, a pixel spider agent with a magnifier" loading="lazy" />
               <div class="x-kind__body">
                 <h3>Crawler</h3>
-                <div class="x-kind__meta"><span class="x-rar x-rar--common">Common</span><span>2,400 supply</span></div>
+                <div class="x-kind__meta"><span class="x-rar x-rar--common">Common</span><span>2,374 supply</span></div>
                 <p>Walks every page and finds what's broken.</p>
                 <ul class="x-traits"><li>Magnifier</li><li>8 Legs</li><li>Green Field</li></ul>
               </div>
@@ -384,7 +380,7 @@
               <img class="x-px" src="meta-tagger.png" alt="Meta Tagger, a pixel agent holding a blank tag" loading="lazy" />
               <div class="x-kind__body">
                 <h3>Meta Tagger</h3>
-                <div class="x-kind__meta"><span class="x-rar x-rar--common">Common</span><span>2,000 supply</span></div>
+                <div class="x-kind__meta"><span class="x-rar x-rar--common">Common</span><span>2,045 supply</span></div>
                 <p>Writes titles and descriptions that earn the click.</p>
                 <ul class="x-traits"><li>Blank Tag</li><li>Cyan Eyes</li><li>Sky Field</li></ul>
               </div>
@@ -393,7 +389,7 @@
               <img class="x-px" src="schema-smith.png" alt="Schema Smith, a pixel smith with a hammer and curly-brace apron" loading="lazy" />
               <div class="x-kind__body">
                 <h3>Schema Smith</h3>
-                <div class="x-kind__meta"><span class="x-rar x-rar--uncommon">Uncommon</span><span>1,500 supply</span></div>
+                <div class="x-kind__meta"><span class="x-rar x-rar--uncommon">Uncommon</span><span>1,529 supply</span></div>
                 <p>Forges structured data so Google reads you right.</p>
                 <ul class="x-traits"><li>Hammer</li><li>{ } Apron</li><li>Visor</li></ul>
               </div>
@@ -402,7 +398,7 @@
               <img class="x-px" src="backlink-hunter.png" alt="Backlink Hunter, a pixel detective in a deerstalker" loading="lazy" />
               <div class="x-kind__body">
                 <h3>Backlink Hunter</h3>
-                <div class="x-kind__meta"><span class="x-rar x-rar--uncommon">Uncommon</span><span>1,300 supply</span></div>
+                <div class="x-kind__meta"><span class="x-rar x-rar--uncommon">Uncommon</span><span>1,277 supply</span></div>
                 <p>Tracks down links worth earning.</p>
                 <ul class="x-traits"><li>Deerstalker</li><li>Chain Badge</li><li>Red Eyes</li></ul>
               </div>
@@ -411,7 +407,7 @@
               <img class="x-px" src="vitals-medic.png" alt="Vitals Medic, a pixel medic with a heartbeat screen" loading="lazy" />
               <div class="x-kind__body">
                 <h3>Vitals Medic</h3>
-                <div class="x-kind__meta"><span class="x-rar x-rar--rare">Rare</span><span>1,000 supply</span></div>
+                <div class="x-kind__meta"><span class="x-rar x-rar--rare">Rare</span><span>981 supply</span></div>
                 <p>Keeps Core Web Vitals healthy: LCP, INP, CLS.</p>
                 <ul class="x-traits"><li>Red Cross</li><li>Heartbeat Screen</li><li>Pink Field</li></ul>
               </div>
@@ -420,7 +416,7 @@
               <img class="x-px" src="canonical-keeper.png" alt="Canonical Keeper, a pixel knight with a C shield and lance" loading="lazy" />
               <div class="x-kind__body">
                 <h3>Canonical Keeper</h3>
-                <div class="x-kind__meta"><span class="x-rar x-rar--rare">Rare</span><span>900 supply</span></div>
+                <div class="x-kind__meta"><span class="x-rar x-rar--rare">Rare</span><span>901 supply</span></div>
                 <p>Guards against duplicate pages.</p>
                 <ul class="x-traits"><li>Plume Helm</li><li>C Shield</li><li>Lance</li></ul>
               </div>
@@ -429,7 +425,7 @@
               <img class="x-px" src="sitemap-cartographer.png" alt="Sitemap Cartographer, a pixel mapmaker with round glasses" loading="lazy" />
               <div class="x-kind__body">
                 <h3>Sitemap Cartographer</h3>
-                <div class="x-kind__meta"><span class="x-rar x-rar--epic">Epic</span><span>600 supply</span></div>
+                <div class="x-kind__meta"><span class="x-rar x-rar--epic">Epic</span><span>570 supply</span></div>
                 <p>Maps every URL for the crawlers.</p>
                 <ul class="x-traits"><li>Round Glasses</li><li>Map Scroll</li><li>Gold Field</li></ul>
               </div>
@@ -438,7 +434,7 @@
               <img class="x-px" src="regression-sentinel.png" alt="Regression Sentinel, a pixel robot with a siren" loading="lazy" />
               <div class="x-kind__body">
                 <h3>Regression Sentinel</h3>
-                <div class="x-kind__meta"><span class="x-rar x-rar--legendary">Legendary</span><span>300 supply</span></div>
+                <div class="x-kind__meta"><span class="x-rar x-rar--legendary">Legendary</span><span>323 supply</span></div>
                 <p>Sounds the siren when a fixed issue comes back.</p>
                 <ul class="x-traits"><li>Siren</li><li>Green Eyes</li><li>Grey Field</li></ul>
               </div>
@@ -463,53 +459,73 @@
             <button class="x-pill" type="button" aria-pressed="false" data-f="sentinel">Regression Sentinel</button>
           </div>
           <div class="x-tiles x-tiles--dense x-px" id="gallery-grid">
-            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #0007" loading="lazy" /><figcaption><b>#0007</b></figcaption></figure>
-            <figure class="x-tile" data-kind="meta"><img src="meta-tagger.png" alt="Meta Tagger #0031" loading="lazy" /><figcaption><b>#0031</b></figcaption></figure>
-            <figure class="x-tile" data-kind="schema"><img src="schema-smith.png" alt="Schema Smith #0118" loading="lazy" /><figcaption><b>#0118</b></figcaption></figure>
-            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #0412" loading="lazy" /><figcaption><b>#0412</b></figcaption></figure>
-            <figure class="x-tile" data-kind="vitals"><img src="vitals-medic.png" alt="Vitals Medic #0560" loading="lazy" /><figcaption><b>#0560</b></figcaption></figure>
-            <figure class="x-tile" data-kind="backlink"><img src="backlink-hunter.png" alt="Backlink Hunter #0733" loading="lazy" /><figcaption><b>#0733</b></figcaption></figure>
-            <figure class="x-tile" data-kind="meta"><img src="meta-tagger.png" alt="Meta Tagger #0891" loading="lazy" /><figcaption><b>#0891</b></figcaption></figure>
-            <figure class="x-tile" data-kind="sentinel"><img src="regression-sentinel.png" alt="Regression Sentinel #1024" loading="lazy" /><figcaption><b>#1024</b></figcaption></figure>
-            <figure class="x-tile" data-kind="canonical"><img src="canonical-keeper.png" alt="Canonical Keeper #1290" loading="lazy" /><figcaption><b>#1290</b></figcaption></figure>
-            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #1455" loading="lazy" /><figcaption><b>#1455</b></figcaption></figure>
-            <figure class="x-tile" data-kind="sitemap"><img src="sitemap-cartographer.png" alt="Sitemap Cartographer #1802" loading="lazy" /><figcaption><b>#1802</b></figcaption></figure>
-            <figure class="x-tile" data-kind="schema"><img src="schema-smith.png" alt="Schema Smith #2210" loading="lazy" /><figcaption><b>#2210</b></figcaption></figure>
-            <figure class="x-tile" data-kind="meta"><img src="meta-tagger.png" alt="Meta Tagger #2577" loading="lazy" /><figcaption><b>#2577</b></figcaption></figure>
-            <figure class="x-tile" data-kind="backlink"><img src="backlink-hunter.png" alt="Backlink Hunter #3016" loading="lazy" /><figcaption><b>#3016</b></figcaption></figure>
-            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #3349" loading="lazy" /><figcaption><b>#3349</b></figcaption></figure>
-            <figure class="x-tile" data-kind="vitals"><img src="vitals-medic.png" alt="Vitals Medic #3870" loading="lazy" /><figcaption><b>#3870</b></figcaption></figure>
-            <figure class="x-tile" data-kind="meta"><img src="meta-tagger.png" alt="Meta Tagger #4102" loading="lazy" /><figcaption><b>#4102</b></figcaption></figure>
-            <figure class="x-tile" data-kind="canonical"><img src="canonical-keeper.png" alt="Canonical Keeper #4688" loading="lazy" /><figcaption><b>#4688</b></figcaption></figure>
-            <figure class="x-tile" data-kind="schema"><img src="schema-smith.png" alt="Schema Smith #5013" loading="lazy" /><figcaption><b>#5013</b></figcaption></figure>
-            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #5521" loading="lazy" /><figcaption><b>#5521</b></figcaption></figure>
-            <figure class="x-tile" data-kind="sitemap"><img src="sitemap-cartographer.png" alt="Sitemap Cartographer #6144" loading="lazy" /><figcaption><b>#6144</b></figcaption></figure>
-            <figure class="x-tile" data-kind="sentinel"><img src="regression-sentinel.png" alt="Regression Sentinel #6981" loading="lazy" /><figcaption><b>#6981</b></figcaption></figure>
-            <figure class="x-tile" data-kind="backlink"><img src="backlink-hunter.png" alt="Backlink Hunter #7055" loading="lazy" /><figcaption><b>#7055</b></figcaption></figure>
-            <figure class="x-tile" data-kind="vitals"><img src="vitals-medic.png" alt="Vitals Medic #7342" loading="lazy" /><figcaption><b>#7342</b></figcaption></figure>
+            <figure class="x-tile" data-kind="meta" data-id="1"><img src="meta-tagger.png" alt="Meta Tagger #1" loading="lazy" /><figcaption><b>#1</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="schema" data-id="2"><img src="schema-smith.png" alt="Schema Smith #2" loading="lazy" /><figcaption><b>#2</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="sentinel" data-id="3"><img src="regression-sentinel.png" alt="Regression Sentinel #3" loading="lazy" /><figcaption><b>#3</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="vitals" data-id="4"><img src="vitals-medic.png" alt="Vitals Medic #4" loading="lazy" /><figcaption><b>#4</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="crawler" data-id="5"><img src="crawler.png" alt="Crawler #5" loading="lazy" /><figcaption><b>#5</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="schema" data-id="6"><img src="schema-smith.png" alt="Schema Smith #6" loading="lazy" /><figcaption><b>#6</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink" data-id="7"><img src="backlink-hunter.png" alt="Backlink Hunter #7" loading="lazy" /><figcaption><b>#7</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink" data-id="8"><img src="backlink-hunter.png" alt="Backlink Hunter #8" loading="lazy" /><figcaption><b>#8</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="crawler" data-id="9"><img src="crawler.png" alt="Crawler #9" loading="lazy" /><figcaption><b>#9</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="meta" data-id="10"><img src="meta-tagger.png" alt="Meta Tagger #10" loading="lazy" /><figcaption><b>#10</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink" data-id="11"><img src="backlink-hunter.png" alt="Backlink Hunter #11" loading="lazy" /><figcaption><b>#11</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="sentinel" data-id="12"><img src="regression-sentinel.png" alt="Regression Sentinel #12" loading="lazy" /><figcaption><b>#12</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="schema" data-id="13"><img src="schema-smith.png" alt="Schema Smith #13" loading="lazy" /><figcaption><b>#13</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="meta" data-id="14"><img src="meta-tagger.png" alt="Meta Tagger #14" loading="lazy" /><figcaption><b>#14</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink" data-id="15"><img src="backlink-hunter.png" alt="Backlink Hunter #15" loading="lazy" /><figcaption><b>#15</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="crawler" data-id="16"><img src="crawler.png" alt="Crawler #16" loading="lazy" /><figcaption><b>#16</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="sitemap" data-id="17"><img src="sitemap-cartographer.png" alt="Sitemap Cartographer #17" loading="lazy" /><figcaption><b>#17</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="schema" data-id="18"><img src="schema-smith.png" alt="Schema Smith #18" loading="lazy" /><figcaption><b>#18</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="meta" data-id="19"><img src="meta-tagger.png" alt="Meta Tagger #19" loading="lazy" /><figcaption><b>#19</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="crawler" data-id="20"><img src="crawler.png" alt="Crawler #20" loading="lazy" /><figcaption><b>#20</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink" data-id="21"><img src="backlink-hunter.png" alt="Backlink Hunter #21" loading="lazy" /><figcaption><b>#21</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="vitals" data-id="22"><img src="vitals-medic.png" alt="Vitals Medic #22" loading="lazy" /><figcaption><b>#22</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="canonical" data-id="23"><img src="canonical-keeper.png" alt="Canonical Keeper #23" loading="lazy" /><figcaption><b>#23</b><span data-gstat>…</span></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink" data-id="24"><img src="backlink-hunter.png" alt="Backlink Hunter #24" loading="lazy" /><figcaption><b>#24</b><span data-gstat>…</span></figcaption></figure>
           </div>
-          <p class="x-small" id="gallery-count">Showing 24 of 7,342 minted.</p>
+          <p class="x-small" id="gallery-count">Showing tokens #1–#24.</p>
         </section>
 
         <section class="x-panel x-market" id="market" data-nav="Market" style="scroll-margin-top:80px">
           <div style="display:grid;gap:10px">
-            <p class="x-eyebrow">Market · demo listings</p>
-            <h2 data-i18n="marketTitle">For sale now</h2>
+            <p class="x-eyebrow" data-i18n="marketEyebrow">Market · Remaining supply</p>
+            <h2 data-i18n="marketTitle">Buy from remaining supply</h2>
           </div>
+          <div class="x-counter">
+            <p class="x-counter__fig" id="mk-left">… / 10,000 left</p>
+            <div class="x-bar" id="mk-bar" role="progressbar" aria-valuemin="0" aria-valuemax="10000" aria-valuenow="10000" aria-label="Remaining supply not read yet"><span style="width: 100%"></span></div>
+          </div>
+
+          <h3 data-i18n="mkKindsTitle">Left by kind</h3>
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th scope="col">Token</th><th scope="col">Kind</th><th scope="col">Price</th><th scope="col">Seller</th><th scope="col"><span class="x-small">Action</span></th></tr>
+                <tr><th scope="col" data-i18n="colKind">Kind</th><th scope="col" data-i18n="colRarity">Rarity</th><th scope="col" data-i18n="colLeft">Remaining</th><th scope="col" data-i18n="colTotal">Total supply</th></tr>
               </thead>
-              <tbody>
-                <tr><th scope="row">#0733</th><td>Backlink Hunter</td><td class="num">0.004 BNB</td><td class="muted">0x41de…9a07</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
-                <tr><th scope="row">#1802</th><td>Sitemap Cartographer</td><td class="num">0.018 BNB</td><td class="muted">0xc9b2…44f1</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
-                <tr><th scope="row">#1024</th><td>Regression Sentinel</td><td class="num">0.0375 BNB</td><td class="muted">0x07ae…d3c8</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
-                <tr><th scope="row">#3870</th><td>Vitals Medic</td><td class="num">0.006 BNB</td><td class="muted">0xf210…6be5</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
-                <tr><th scope="row">#5521</th><td>Crawler</td><td class="num">0.0045 BNB</td><td class="muted">0x5c8d…0e2a</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
-              </tbody>
+              <tbody id="mk-kinds"></tbody>
             </table>
           </div>
+
+          <h3 data-i18n="mkNextTitle">Up next</h3>
+          <div class="x-notice x-notice--warn" id="mk-nowallet" hidden>
+            <p data-i18n="noWallet">No wallet found. Open this page inside MetaMask, Trust Wallet or Binance Web3 Wallet's browser.</p>
+            <div class="x-prompt-row">
+              <a class="x-btn x-btn--ghost" id="mk-mm" href="https://metamask.app.link/dapp/">Open in MetaMask</a>
+              <a class="x-btn x-btn--ghost" id="mk-trust" href="https://link.trustwallet.com/open_url?coin_id=20000714">Open in Trust Wallet</a>
+            </div>
+          </div>
+          <p class="x-small" id="mk-status" role="status" aria-live="polite"></p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th scope="col">Token</th><th scope="col" data-i18n="colKind">Kind</th><th scope="col" data-i18n="colPrice">Price</th><th scope="col"><span class="x-small" data-i18n="colAction">Action</span></th></tr>
+              </thead>
+              <tbody id="mk-next"><tr><th scope="row">…</th><td colspan="3" class="muted">Reading the chain…</td></tr></tbody>
+            </table>
+          </div>
+          <p class="x-small" data-i18n="mkNote">Tokens are bought in order: buying #N also mints the tokens before it in this list to your wallet.</p>
+          <div class="x-notice" id="mk-tx" role="status" aria-live="polite" hidden></div>
         </section>
       </main>
 
@@ -529,6 +545,9 @@
       const CHAIN_ID_HEX = "0x38"; // BNB Smart Chain mainnet (testnet = 0x61)
       /* ============================================================ */
 
+      /* KINDS[i] = kind index of token id i+1 (matches the contract's kindOf) */
+      const KINDS = "1274023301372130621034534725112235135122702026203110152436435032310120305031352300000562211341206436222044204015242160054521230652013230004310320030101421350403652304020527643033000120105320210006053103010123202745160002142103115010500222213631131001612001320260100453070024605255233103040120274541501130220005211571253136723140402150650652311422026121010135130350436500430041445211345030351761634120410025100450605731151201305136501444305221231151445210302251622055434653274221115510005212530567024144401633567212511013015113461114027364014145217102000234203362353042623141310033313226050014125511130260301213007224076470211101031210167002000521613740023370002503066063134422141607133245522010411413012511413100143205341113110354202514061230221230264531344015232310316110306500202315115112521113203506521235143001013106265431531100020524740504230110103022206642150315253710206012366121041342604532107141303600131234301313025465514053020305622526541241005520735332411502311050104403260403400245170727144053404014352360417731230021356016242121101120104475256045436032520031311464420150032060111140701105627115213606113073310541031001046334106000031050146037021024222730240110022352723021012412031217133151023020011354400503240123310035537152501051213100021341173636002022011433303030025500111110620302603032621222205012431266216250226301144211202270052202312101006431410060150344335263273521122123505440071040110210620144170270014134033223257021604112062320110166400025022033352420703011510000012262233351221537444034231220415470411117054441304212310032130042011153571117001501304150140063105145222016443230153400320421301170303104140374213633241064211465642050103366212133401023016000111100440034745175262534573421000064013114136301414064110254010153405043020233232123011106120012364020112212451020010122053751300004014512311251666003310121001551020001241112623430200214020411110200071221201462324321015335055101213005511100551404024416260536036214011041004520604117227017100215223501236560203500150210600733150411056101303613017351304140304111151211135130314626005451401023001012150600202401102324034541010361002512020051114103405253321445002400416437070100020203110627101712104463051014652511340213103205030551040104250315053404553135110242505116030205150112234100454500017245225530000274020622100112335636512111212401601170121305010410002201022224730144331610503015125310621530203542023131210271651373232664202635131103426001251022121040047232006425020512145354210211551105322702044207401432424525365014201621141730100211633415102605331040211430112342614012431411040127021103211553560235012211101300733510643240202231214150535171111003474123772100200644303206324020300105132423004340722705014046625133232011530132110215163554650031257101103014130334004504412617117514004151125403131202024630231531030130123406105066200423130421002661022000101051232102264046231142761411456502113322601230411055534511131355044001101336234051374312100101425014414003443523147167041424410265164341125344333500004132423004000007102271332030753160122612301745243260437015022212121463213011223654362220230321400210210125121165310401111300212001135415542414454153000021313010417374300333215702620131605100651143200501450120034515006161364251010010100015403011320114532113112014400014111005130250213503016243020124045115030306442220030047342503340535030124061204050110000132011143150105051002100000451531001431736413131015053173002143135100101203012711517603635511110601236171002200413243611134204123117410711254001113333215606160253114120160042213161242343477410241400003011040036431105411414062727432434441004131230201100105360623611241050166135011521251372201523133211141230343102045256105342215334322406176001151073715121003470131320660350303441301125123035262042071356077365763030230001666250520602242000205171103046532501353307324245001505110404150111455043600540200011732100700467150124300131121106712016000611244152350525430422110440350500131236020226410445132010616324415415135410101606315161033441130022644631133412106012070672350205310222121641360405206501300401060701510610514201413732665252122475025103042511655300211203552116111303200645410032211003335236062061114003103404127020010110265114301000303013131622413161244207700616007134310541000002030133161623101511643714022271201126221300413010020314240541322631415331006011114213233020720015021106036103005702242005600034055702207101044501221251530140401045135370134441450501100004520224250430401154211246500022020243631346253125730010542003000013475041211041351030227130546121631134051451132701531312117404722306332251000125220610214365055450200600202010041251110052625320040502261422340125233106172142030106253000004103600614333135101110013230226402111300521342205410521225115005030036071041076025116164220245223454716302134270200634113201022231100240156220100113503122050545170113000610202200270400502211311332016005420025261414003636050747000153203032522232032650520021200041350702033111007551200055040023420011562121164011126050000053745533001132703520123131401112101060235152162312212020202054121364003002054531100011505311162200261301120752241235600412226736531010302101413053213042161010020010012620143001636153404100203403001240531311601131371362350066402003215433020044071344311013014023340103023446524334121063070452733014244112127004433246013214201252535626052655220101016262114110020604510354127403540710130001153200213212321101153033011441205202100105543305540740633011325530242033430530173263130310003603150306071424512641145772534311255353320301003135211303002603076450310235240100111141030722213331704030300321202522330520503311202231202331022061004313222010105102070304010345025061150401004032420441611211202641504210330302300323254134111145023310320451534203613144155375533213233311133755111213121030603103243033005613013542101406361724023224315100532342445521312271540022622533340520102123640250003021101060060661020251012320232006012035003301024624201412110443314623425021316204030004022010315350422753614001114550101540250005022201050102401051344534141000474401001551222020043600422621301150632425410351310220302012166322301435605401213312120613213241051010026514655725130121210131212761752225260112314221155433110153212701720012126221134415020051212431540240050225104504501342702104663010325710243010005325231004105144126042100072333752201120351133241221000311210311227160103040340002211170221262650120321363425505233222111000440031002313074123315730071112323251723305410173315520000510241150102500216123565303001002301303301073430021522323014441251556113537241750245341211200236153027321246000100705461210015170554000230225315303511034320013322301432735455303243241162115062430006205266020121612522124260214702011401311321411201121642472307220030502444201404305024453410541065502225001620355113210035410530662444102251611451100000227124120206322041234103413220113331410022430700232230713200545410140010000134302105054403122020324503020403032113512201541431211034053314003744537431160110001536021760413371210667614731150056616113471240132312102502237310330131446712763213622130135020215242103406113122541003122606540246411004210754141431241422135210461100121315126322403456200323132631160515041113171651305223001201010072030604405227030310613000012010321361310610660550610011010351050652460132142132001121064241412614503300154104510637500103015161660503003022024312360103075100554035046204117011011122601311615030153110232217034520123251031602110062510100210427061501052640310242001701615212021200100111104115540620461010223133601655307001030030030025232546012025014015220425114000730254240422102437134503223121043052054311402122101270100164545117100015311624253017561011111425120336410161201161311330112101153530430011043011305310710015101072260102051612527615004411400011304007157074242551063230326144355050073100565100221152162003111260452621020004040574171041325031452310157041012172560060225307060110144135132020521022065532613420205113031414041121200001451043340342132012142011430411152323034202622040023322102014031040245210352000416401431001103501002102030010043154277010222044002053515025341004211523345010226047010045044354424704644140035405030240321200131132011672201113053706720740310041102460725022072100503210024205004203506410043070262545303033063302624751014010100001561435065640422143511555006507110425320010703004261620135001205750031251351320017444125213332104505631317026125620543030500010147341054532160150160465232257533023103155020501110300600011106066602160305104116110722041211103340254051040010644130400132213034143217111306101125213015360401052142011214711110402300512445164213024210002210232210354162653520142420340042122242130232323024520421004526017332407031000120004111403112063200335044014356100121255116200031400512012311111016401020532312022610244332502506103337443126302132102311123546040200054322232074041225112233025401234155301031220065111023127060114521363110104543003130112121211630007105412513225430212312112325225400012031131231032101023021443147005007165073011252001605012525131122010103022221312305121303616550516620013441700020171013720347017004500014012226113366010320601022501046120024031052010300162105220355210002231002160302043015613266044206015145372100620150430131013014501337041236664526240521220021053211356602010504200267115130401030542600243103023143120625015303056520400206032170155005115254733043005243006225541501250032011224753561100604304504420004212630003300043130104104310231735334263013302616020725503300023032121103550420703233053154414122612161621370406007060030122405633112300010505010020032624230050002451223311124075322316000234532210275021561011220221210035210523743220001123010612300450113201212514651247505005202122042011300245003027414313032100016226230210611010142261721453033071334000160240454001634670116150131334062111215012542132150446126003157044671111001230320201410142633142110253313153007412341017330053126212005021251002104600411101422155171603112077100213017571021425125407000020300550344145070045002412413415000040530400325613322310000213312423003052";
+
       (function () {
         var $ = function (s, r) { return (r || document).querySelector(s); };
         var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
@@ -536,7 +555,8 @@
         /* toast */
         var toast = $("#toast"), tt;
         function say(msg) { toast.textContent = msg; toast.classList.add("is-on"); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove("is-on"); }, 2200); }
-        $$("[data-toast]").forEach(function (b) { b.addEventListener("click", function () { say(b.getAttribute("data-toast")); }); });
+        function L(en, id) { return isID ? id : en; }
+        function fmtN(n) { return Number(n).toLocaleString("en-US"); }
 
         /* tabs */
         var tabs = $$('[role="tab"]');
@@ -640,16 +660,41 @@
           ct = setTimeout(function () { copyBtn.textContent = label; copyBtn.removeAttribute("aria-label"); }, 1800);
         });
 
-        /* gallery filter */
-        var tiles = $$("#gallery-grid .x-tile"), count = $("#gallery-count");
-        group("#filter", "data-f", function (f) {
-          var shown = 0;
-          tiles.forEach(function (t) { var on = f === "all" || t.getAttribute("data-kind") === f; t.hidden = !on; if (on) shown++; });
-          count.textContent = "Showing " + shown + " of 7,342 minted.";
-        });
+        /* gallery: tokens #1–#24 with their real kinds */
+        var tiles = $$("#gallery-grid .x-tile"), count = $("#gallery-count"), gf = "all";
+        function renderGallery() {
+          var shown = 0, s = W.supply === null ? null : Number(W.supply);
+          tiles.forEach(function (t) {
+            var on = gf === "all" || t.getAttribute("data-kind") === gf; t.hidden = !on; if (on) shown++;
+            var id = Number(t.getAttribute("data-id")), st = $("[data-gstat]", t);
+            st.textContent = s === null ? "…" : id <= s ? "Minted" : L("Available", "Tersedia");
+            st.classList.toggle("is-minted", s !== null && id <= s);
+          });
+          count.textContent = L("Showing " + shown + " of tokens #1–#24.", "Menampilkan " + shown + " dari token #1–#24.");
+        }
+        group("#filter", "data-f", function (f) { gf = f; renderGallery(); });
 
-        /* wallet lookup */
-        $("#lookup").addEventListener("submit", function (e) { e.preventDefault(); $("#lookup-result").hidden = false; });
+        /* wallet lookup: balanceOf */
+        var LK = null;
+        function drawLookup() {
+          var out = $("#lookup-result");
+          if (!LK) { out.hidden = true; return; }
+          out.hidden = false;
+          out.textContent = LK.s === "wait" ? L("Checking…", "Memeriksa…")
+            : LK.s === "bad" ? L("Enter a full 0x address (42 characters).", "Masukkan alamat 0x lengkap (42 karakter).")
+            : LK.s === "err" ? L("Couldn't read the chain. Try again in a moment.", "Tidak bisa membaca chain. Coba lagi sebentar lagi.")
+            : L("This wallet holds " + fmtN(LK.n) + " agent" + (LK.n === 1 ? "" : "s") + ".", "Wallet ini memegang " + fmtN(LK.n) + " agent.");
+        }
+        $("#lookup").addEventListener("submit", function (e) {
+          e.preventDefault();
+          var a = $("#lookup-addr").value.trim();
+          if (!/^0x[0-9a-fA-F]{40}$/.test(a)) { LK = { s: "bad" }; drawLookup(); return; }
+          var me = LK = { s: "wait" }; drawLookup();
+          rawRead(SEL.balanceOf + encAddr(a)).then(function (r) {
+            if (LK !== me) return;
+            LK = { s: "ok", n: Number(BigInt(r.slice(0, 66))) }; drawLookup();
+          }).catch(function () { if (LK === me) { LK = { s: "err" }; drawLookup(); } });
+        });
 
         /* ===== real wallet mint (EIP-1193, raw eth_call / eth_sendTransaction) ===== */
         var CHAINS = {
@@ -657,7 +702,7 @@
           "0x61": { chainId: "0x61", chainName: "BNB Smart Chain Testnet", nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 }, rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"], blockExplorerUrls: ["https://testnet.bscscan.com"] }
         };
         var WANT = CHAIN_ID_HEX.toLowerCase(), CHAIN = CHAINS[WANT] || CHAINS["0x38"], EXPLORER = CHAIN.blockExplorerUrls[0];
-        var SEL = { mint: "0xa0712d68", quote: "0x8f79306e", totalSupply: "0x18160ddd", freeLeft: "0xeb28217e", mintedBy: "0x3cef28d2", mintOpen: "0x24bbd049", price: "0xa035b1fe", freeMintFee: "0xa1e91c81" };
+        var SEL = { mint: "0xa0712d68", quote: "0x8f79306e", totalSupply: "0x18160ddd", freeLeft: "0xeb28217e", mintedBy: "0x3cef28d2", mintOpen: "0x24bbd049", price: "0xa035b1fe", freeMintFee: "0xa1e91c81", ownerOf: "0x6352211e", balanceOf: "0x70a08231" };
         var MAX_PER_WALLET = 12, SUPPLY = 10000, WEI = BigInt("1000000000000000000");
         var eth = window.ethereum;
         var W = { account: null, chainId: null, open: null, supply: null, free: null, mine: null, price: null, fee: null, quote: null, qerr: "", busy: false, qseq: 0 };
@@ -689,18 +734,19 @@
         function onRightChain() { return (W.chainId || "").toLowerCase() === WANT; }
         function canRead() { return !!(eth && CONTRACT_ADDRESS && onRightChain()); }
 
-        var txBox = $("#w-tx");
-        function showTx(tone, text, hash) {
-          txBox.className = "x-notice" + (tone ? " x-notice--" + tone : "");
-          txBox.textContent = "";
-          var p = document.createElement("p"); p.textContent = text; txBox.appendChild(p);
+        var txBox = $("#w-tx"), mkBox = $("#mk-tx");
+        function showTx(tone, text, hash, box) {
+          box = box || txBox;
+          box.className = "x-notice" + (tone ? " x-notice--" + tone : "");
+          box.textContent = "";
+          var p = document.createElement("p"); p.textContent = text; box.appendChild(p);
           if (hash) {
             var a = document.createElement("a");
             a.href = EXPLORER + "/tx/" + hash; a.target = "_blank"; a.rel = "noopener";
-            a.textContent = "View " + short(hash) + " on BscScan ↗";
-            txBox.appendChild(a);
+            a.textContent = L("View " + short(hash) + " on BscScan ↗", "Lihat " + short(hash) + " di BscScan ↗");
+            box.appendChild(a);
           }
-          txBox.hidden = false;
+          box.hidden = false;
         }
 
         function updateHero() {
@@ -761,6 +807,7 @@
           mb.disabled = !!why;
           mb.textContent = why || "Mint " + q;
           updateHero();
+          renderData();
         }
 
         /* public JSON-RPC reads for visitors without a connected wallet */
@@ -799,7 +846,7 @@
             qmax["qty-w"] = Math.max(0, MAX_PER_WALLET - Number(W.mine));
             redraw["qty-w"]();
             render();
-            return wQuote();
+            return Promise.all([wQuote(), mQuotes()]);
           }).catch(function (e) { W.qerr = errMsg(e); render(); });
         }
 
@@ -823,11 +870,14 @@
           });
         }
 
-        function connect() {
+        function connect(box) {
+          box = box === mkBox ? mkBox : txBox;
           if (!eth) {
-            $("#dl-mm").href = "https://metamask.app.link/dapp/" + location.host + location.pathname;
-            $("#dl-trust").href = "https://link.trustwallet.com/open_url?coin_id=20000714&url=" + encodeURIComponent(location.href);
-            $("#w-nowallet").hidden = false;
+            var mm = "https://metamask.app.link/dapp/" + location.host + location.pathname;
+            var tw = "https://link.trustwallet.com/open_url?coin_id=20000714&url=" + encodeURIComponent(location.href);
+            $("#dl-mm").href = $("#mk-mm").href = mm;
+            $("#dl-trust").href = $("#mk-trust").href = tw;
+            (box === mkBox ? $("#mk-nowallet") : $("#w-nowallet")).hidden = false;
             return;
           }
           eth.request({ method: "eth_requestAccounts" })
@@ -835,7 +885,7 @@
             .then(function () { return eth.request({ method: "eth_chainId" }); })
             .then(function (c) { W.chainId = c; return refresh(); })
             .catch(function (e) {
-              showTx("err", errMsg(e));
+              showTx("err", errMsg(e), null, box);
               eth.request({ method: "eth_chainId" }).then(function (c) { W.chainId = c; render(); }).catch(function () {});
             });
         }
@@ -866,8 +916,193 @@
             .catch(function (e) { W.busy = false; showTx("err", errMsg(e), txHash); render(); });
         }
 
-        $("#w-connect").addEventListener("click", connect);
+        $("#w-connect").addEventListener("click", function () { connect(); });
         $("#w-mint").addEventListener("click", mint);
+
+        /* ===== reads that work with or without a wallet (raw hex result) ===== */
+        function rpcRaw(i, data) {
+          if (!CONTRACT_ADDRESS || !window.fetch || i >= RPCS.length) return Promise.reject(new Error("rpc"));
+          return fetch(RPCS[i], {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: CONTRACT_ADDRESS, data: data }, "latest"] })
+          }).then(function (r) { return r.json(); }).then(function (j) {
+            if (!j || !j.result || j.result.length < 66) throw new Error("rpc");
+            return j.result;
+          }).catch(function () { return rpcRaw(i + 1, data); });
+        }
+        function rawRead(data) {
+          var p = canRead()
+            ? eth.request({ method: "eth_call", params: [{ to: CONTRACT_ADDRESS, data: data }, "latest"] }).then(function (r) { if (!r || r.length < 66) throw new Error("empty"); return r; })
+            : Promise.reject(new Error("no wallet"));
+          return p.catch(function () { return rpcRaw(0, data); });
+        }
+
+        /* ===== kinds ===== */
+        var KIND = [
+          { n: "Crawler", r: "common", en: "Common", id: "Umum" },
+          { n: "Meta Tagger", r: "common", en: "Common", id: "Umum" },
+          { n: "Schema Smith", r: "uncommon", en: "Uncommon", id: "Tidak umum" },
+          { n: "Backlink Hunter", r: "uncommon", en: "Uncommon", id: "Tidak umum" },
+          { n: "Vitals Medic", r: "rare", en: "Rare", id: "Langka" },
+          { n: "Canonical Keeper", r: "rare", en: "Rare", id: "Langka" },
+          { n: "Sitemap Cartographer", r: "epic", en: "Epic", id: "Epik" },
+          { n: "Regression Sentinel", r: "legendary", en: "Legendary", id: "Legendaris" }
+        ];
+        var KIMG = $$(".x-kind > img"), KTOTAL = [0, 0, 0, 0, 0, 0, 0, 0];
+        for (var ki = 0; ki < KINDS.length; ki++) KTOTAL[+KINDS[ki]]++;
+        function kindOf(id) { return +KINDS[id - 1]; }
+        function kimg(k, alt) { var i = KIMG[k].cloneNode(false); i.alt = alt || ""; i.className = "x-px"; i.loading = "lazy"; return i; }
+        function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+        function labelRows(tbody) {
+          var names = $$("thead th", tbody.parentNode).map(function (h) { return h.textContent.trim(); });
+          $$("tr", tbody).forEach(function (tr) {
+            [].slice.call(tr.children).forEach(function (c, i) { if (i > 0 && names[i] && c.colSpan === 1) c.setAttribute("data-label", names[i]); });
+          });
+        }
+        function kcell(k) { var s = el("span", "x-kcell"); s.appendChild(kimg(k, "")); s.appendChild(document.createTextNode(KIND[k].n)); return s; }
+
+        /* ===== market: buy from the remaining supply ===== */
+        var M = { quotes: [], qerr: "", qseq: 0, sig: "" }, NEXT = 12;
+        function mAllowed() {
+          if (!W.account || !canRead() || W.mine === null) return null;
+          return Math.max(0, MAX_PER_WALLET - Number(W.mine));
+        }
+        function mQuotes() {
+          var seq = ++M.qseq, a = mAllowed();
+          M.quotes = []; M.qerr = "";
+          if (a === null || W.supply === null) { renderMarket(); return Promise.resolve(); }
+          var n = Math.min(a, NEXT, SUPPLY - Number(W.supply)), ps = [];
+          for (var k = 1; k <= n; k++) ps.push(call(SEL.quote + encAddr(W.account) + encUint(k)));
+          renderMarket();
+          return Promise.all(ps).then(function (r) {
+            if (seq === M.qseq) { M.quotes = r; renderMarket(); }
+          }).catch(function (e) { if (seq === M.qseq) { M.qerr = errMsg(e); renderMarket(); } });
+        }
+
+        function renderMarket() {
+          var sig = [isID, W.supply, W.account, W.chainId, W.mine, W.free, W.open, W.busy, W.fee, M.quotes.length, M.qerr, !!eth].join("|");
+          if (sig === M.sig) return;
+          M.sig = sig;
+          var s = W.supply === null ? null : Number(W.supply), left = s === null ? null : SUPPLY - s;
+
+          /* summary */
+          var fig = $("#mk-left"), bar = $("#mk-bar");
+          if (left === null) fig.textContent = L("… / 10,000 left", "Tersisa … / 10,000");
+          else {
+            fig.textContent = L(fmtN(left) + " / 10,000 left", "Tersisa " + fmtN(left) + " / 10,000");
+            bar.setAttribute("aria-valuenow", left);
+            bar.setAttribute("aria-label", L(fmtN(left) + " of 10,000 left", "Tersisa " + fmtN(left) + " dari 10,000"));
+            $("span", bar).style.width = (left / SUPPLY) * 100 + "%";
+          }
+
+          /* per kind */
+          var rem = [0, 0, 0, 0, 0, 0, 0, 0];
+          if (s !== null) for (var i = s; i < KINDS.length; i++) rem[+KINDS[i]]++;
+          var kb = $("#mk-kinds"); kb.textContent = "";
+          KIND.forEach(function (K, k) {
+            var tr = el("tr"), th = el("th"); th.scope = "row"; th.appendChild(kcell(k)); tr.appendChild(th);
+            var td = el("td"); td.appendChild(el("span", "x-rar x-rar--" + K.r, L(K.en, K.id))); tr.appendChild(td);
+            tr.appendChild(el("td", "num", s === null ? "…" : fmtN(rem[k])));
+            tr.appendChild(el("td", "num", fmtN(KTOTAL[k])));
+            kb.appendChild(tr);
+          });
+          labelRows(kb);
+
+          /* status line */
+          var a = mAllowed(), st = $("#mk-status"), free = W.free === null ? 0 : Number(W.free);
+          var feeTxt = W.fee !== null ? fmtBNB(W.fee) : "0.0003";
+          if (!CONTRACT_ADDRESS) st.textContent = L("Contract not deployed yet.", "Kontrak belum di-deploy.");
+          else if (a !== null) st.textContent = L(
+            "Connected " + short(W.account) + " · " + free + " free mint" + (free === 1 ? "" : "s") + " left · " + W.mine + " / 12 minted",
+            "Terhubung " + short(W.account) + " · sisa " + free + " mint gratis · " + W.mine + " / 12 di-mint") + (M.qerr ? " · " + M.qerr : "");
+          else if (W.account && !onRightChain()) st.textContent = L("Wrong network. Tap Buy to switch to " + CHAIN.chainName + ".", "Jaringan salah. Ketuk Beli untuk pindah ke " + CHAIN.chainName + ".");
+          else st.textContent = L("Prices for your wallet show once it is connected.", "Harga untuk wallet kamu muncul setelah terhubung.");
+
+          /* up next */
+          var nb = $("#mk-next"); nb.textContent = "";
+          function msgRow(t) { var tr = el("tr"), th = el("th", null, "—"); th.scope = "row"; tr.appendChild(th); var td = el("td", "muted", t); td.colSpan = 3; tr.appendChild(td); nb.appendChild(tr); }
+          if (s === null) { msgRow(L("Reading the chain…", "Membaca chain…")); return; }
+          if (left <= 0) { msgRow(L("Sold out: all 10,000 are minted.", "Habis: semua 10,000 sudah di-mint.")); return; }
+          var n = Math.min(NEXT, left);
+          for (var k = 1; k <= n; k++) {
+            var id = s + k, kd = kindOf(id), tr = el("tr"), th = el("th", null, "#" + id); th.scope = "row"; tr.appendChild(th);
+            var tk = el("td"); tk.appendChild(kcell(kd)); tr.appendChild(tk);
+            var tp = el("td", "num"), btn = el("button", "x-btn", L("Buy", "Beli")); btn.type = "button";
+            btn.setAttribute("aria-label", L("Buy up to #" + id, "Beli sampai #" + id));
+            if (a === null) {
+              tp.className = "";
+              tp.textContent = L("0.0015 BNB (first 2: fee 0.0003 BNB)", "0.0015 BNB (2 pertama: fee 0.0003 BNB)");
+              btn.addEventListener("click", function () { connect(mkBox); });
+            } else if (k > a) {
+              tp.textContent = "—"; btn.disabled = true; btn.textContent = L("Limit 12 per wallet", "Batas 12 per wallet"); btn.removeAttribute("aria-label");
+            } else {
+              var q = M.quotes[k - 1];
+              if (q === undefined) tp.textContent = M.qerr ? "—" : "…";
+              else {
+                tp.textContent = L("Total ", "Total ") + fmtBNB(q) + " BNB";
+                tp.appendChild(el("small", null, k <= free ? L("free + fee " + feeTxt + " BNB", "gratis + fee " + feeTxt + " BNB") : L(k + " tokens in total", k + " token total")));
+              }
+              if (W.busy) { btn.disabled = true; btn.textContent = "…"; }
+              else if (W.open === false) { btn.disabled = true; btn.textContent = L("Mint not open yet", "Mint belum dibuka"); }
+              else if (q === undefined) btn.disabled = true;
+              else btn.addEventListener("click", (function (kk) { return function () { buyK(kk); }; })(k));
+            }
+            var ta = el("td"); ta.appendChild(btn); tr.appendChild(ta);
+            nb.appendChild(tr);
+          }
+          labelRows(nb);
+        }
+
+        function buyK(k) {
+          var value = M.quotes[k - 1], a = mAllowed(), txHash = null;
+          if (W.busy || value === undefined || a === null || k > a || !W.open) return;
+          W.busy = true; render();
+          showTx("", L("Confirm the transaction in your wallet…", "Konfirmasi transaksi di wallet kamu…"), null, mkBox);
+          eth.request({ method: "eth_sendTransaction", params: [{ from: W.account, to: CONTRACT_ADDRESS, value: "0x" + value.toString(16), data: SEL.mint + encUint(k) }] })
+            .then(function (hash) { txHash = hash; showTx("", L("Pending… waiting for BNB Smart Chain to confirm.", "Menunggu… BNB Smart Chain sedang mengonfirmasi."), hash, mkBox); return waitReceipt(hash); })
+            .then(function (rc) {
+              W.busy = false;
+              if (rc.status === "0x1") {
+                var msg = L("Bought! " + k + " agent" + (k === 1 ? "" : "s") + " minted to your wallet 🎉", "Berhasil! " + k + " agent di-mint ke wallet kamu 🎉");
+                showTx("ok", msg, txHash, mkBox); say(msg);
+              } else showTx("err", L("The transaction failed onchain (reverted). No agents were minted.", "Transaksi gagal onchain (revert). Tidak ada agent yang di-mint."), txHash, mkBox);
+              refresh();
+            })
+            .catch(function (e) { W.busy = false; showTx("err", errMsg(e), txHash, mkBox); render(); });
+        }
+
+        /* ===== latest minted: last 12 ids with owners ===== */
+        var LT = { sig: "", owners: {} };
+        function renderLatest() {
+          var st = $("#latest-status"), grid = $("#latest-grid"), empty = $("#latest-empty");
+          var s = W.supply === null ? null : Number(W.supply), sig = isID + "|" + s;
+          if (sig === LT.sig) return;
+          LT.sig = sig;
+          grid.textContent = "";
+          if (s === null) { st.textContent = L("Reading the chain…", "Membaca chain…"); empty.hidden = true; return; }
+          if (s === 0) { st.textContent = L("No one has minted yet. Be the first!", "Belum ada yang mint. Jadilah yang pertama!"); empty.hidden = false; return; }
+          empty.hidden = true;
+          var lo = Math.max(1, s - 11);
+          st.textContent = L("The last " + (s - lo + 1) + " minted, newest first.", (s - lo + 1) + " terakhir di-mint, terbaru dulu.");
+          for (var id = s; id >= lo; id--) (function (id) {
+            var k = kindOf(id), fig = el("figure", "x-tile"), cap = el("figcaption");
+            fig.appendChild(kimg(k, KIND[k].n + " #" + id));
+            cap.appendChild(el("b", null, "#" + id));
+            cap.appendChild(el("span", null, KIND[k].n));
+            var own = el("a", null, "…"); own.target = "_blank"; own.rel = "noopener";
+            cap.appendChild(own); fig.appendChild(cap); grid.appendChild(fig);
+            function setOwner(addr) {
+              own.textContent = short(addr); own.href = EXPLORER + "/address/" + addr;
+              own.setAttribute("aria-label", L("Owner ", "Pemilik ") + addr + L(" on BscScan", " di BscScan"));
+            }
+            if (LT.owners[id]) setOwner(LT.owners[id]);
+            else rawRead(SEL.ownerOf + encUint(id)).then(function (r) {
+              var addr = "0x" + r.slice(26, 66); LT.owners[id] = addr; setOwner(addr);
+            }).catch(function () { own.textContent = "—"; });
+          })(id);
+        }
+
+        function renderData() { renderMarket(); renderLatest(); renderGallery(); }
 
         /* contract address lines */
         $$("[data-contract-line]").forEach(function (el) {
@@ -906,7 +1141,12 @@
           agentTitle: "Mint dengan agen", copy: "Salin prompt", connect: "Hubungkan dompet",
           supplyTitle: "Pembagian 10.000 per jenis", seeKinds: "Lihat semua jenis ↓",
           kindsTitle: "Semua jenis", galleryTitle: "Lihat semua 10.000 di galeri", all: "Semua",
-          marketTitle: "Dijual sekarang", lookupBtn: "Cari"
+          marketEyebrow: "Pasar · Sisa suplai", marketTitle: "Beli dari suplai tersisa", lookupBtn: "Cari",
+          mkKindsTitle: "Sisa per jenis", mkNextTitle: "Berikutnya yang akan di-mint",
+          colKind: "Jenis", colRarity: "Kelangkaan", colLeft: "Tersisa", colTotal: "Total suplai", colPrice: "Harga", colAction: "Aksi",
+          noWallet: "Wallet tidak ditemukan. Buka halaman ini di browser MetaMask, Trust Wallet atau Binance Web3 Wallet.",
+          mkNote: "Token dibeli berurutan: membeli #N juga me-mint token sebelumnya di daftar ini ke wallet kamu.",
+          toMarket: "Ke Pasar"
         };
         var els = $$("[data-i18n]"), langBtn = $("#lang-btn"), isID = false;
         els.forEach(function (el) { el.setAttribute("data-en", el.textContent); });
@@ -916,6 +1156,7 @@
           document.documentElement.lang = isID ? "id" : "en";
           langBtn.textContent = isID ? "EN" : "中文 / ID";
           langBtn.setAttribute("aria-label", isID ? "Switch language to English" : "Switch language to Bahasa Indonesia");
+          renderData(); drawLookup();
         });
       })();
     </script>
