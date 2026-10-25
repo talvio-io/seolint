@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SEOLint Onchain Agents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Press+Start+2P&display=swap"
+    />
+    <link rel="stylesheet" href="hark.css" />
+    <link rel="stylesheet" href="hark-hero.css" />
+    <style>
+      .x-body {
+        --x-bg: #0b1020;
+        --x-panel: #121a33;
+        --x-panel-2: #1a2445;
+        --x-line: #2c3a66;
+        --x-lime: #b6ff3b;
+        --x-ink: #e8edf8;
+        --x-dim: #9aa6c4;
+        --x-pixel: "Press Start 2P", ui-monospace, monospace;
+        --x-mono: "Geist Mono", ui-monospace, monospace;
+        --x-common: #9aa3b5;
+        --x-uncommon: #3ddc84;
+        --x-rare: #4da3ff;
+        --x-epic: #b57bff;
+        --x-legendary: #ffcc33;
+        color-scheme: dark;
+        background: var(--x-bg);
+        background-image: radial-gradient(#ffffff0d 1px, transparent 1px);
+        background-size: 16px 16px;
+        color: var(--x-ink);
+      }
+      .x-body img.x-px, .x-px img { image-rendering: pixelated; image-rendering: crisp-edges; }
+      .x-body h1, .x-body h2, .x-body h3 { font-family: var(--x-pixel); font-weight: 400; line-height: 1.35; letter-spacing: 0; }
+      .x-body h2 { font-size: clamp(15px, 4vw, 22px); }
+      .x-body h3 { font-size: 12px; }
+
+      /* nav */
+      .x-nav { position: sticky; top: 8px; z-index: 20; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; padding: 6px 8px; background: #0b1020e6; border: 3px solid var(--x-line); box-shadow: 4px 4px 0 #000; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+      .x-nav a, .x-nav button { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 10px; color: var(--x-ink); text-decoration: none; font: 500 13px/1 var(--x-mono); background: none; border: 0; cursor: pointer; }
+      .x-nav .x-home { font-family: var(--x-pixel); font-size: 12px; color: var(--x-lime); margin-right: auto; padding-left: 4px; }
+      .x-nav a:hover, .x-nav button:hover { color: var(--x-lime); }
+      .x-nav .x-lang { border: 2px solid var(--x-lime); color: var(--x-lime); min-height: var(--tap); min-width: var(--tap); justify-content: center; margin-left: 4px; }
+      @media (max-width: 420px) { .x-nav .x-home { width: 100%; } }
+
+      /* panels and controls */
+      .x-panel { background: var(--x-panel); border: 3px solid var(--x-line); box-shadow: 6px 6px 0 #000; padding: clamp(16px, 4vw, 28px); display: grid; gap: 18px; min-width: 0; }
+      .x-eyebrow { font: 500 12px/1.4 var(--x-mono); color: var(--x-lime); text-transform: uppercase; letter-spacing: 0.08em; }
+      .x-dim { color: var(--x-dim); }
+      .x-small { font: 400 12px/1.6 var(--x-mono); color: var(--x-dim); }
+      .x-small a { color: var(--x-lime); display: inline-flex; align-items: center; min-height: var(--tap); }
+      .x-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--tap); padding: 0 16px; font: 400 12px/1.2 var(--x-pixel); color: #0b1020; background: var(--x-lime); border: 3px solid #000; box-shadow: 4px 4px 0 #000; cursor: pointer; text-decoration: none; transition: transform var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out); }
+      .x-btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 #000; }
+      .x-btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 #000; }
+      .x-btn--ghost { background: transparent; color: var(--x-lime); border-color: var(--x-lime); box-shadow: 4px 4px 0 #000; }
+      .x-btn--big { min-height: 60px; font-size: 16px; width: 100%; }
+      .x-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: 4px 4px 0 #000; }
+      .x-btn--big:disabled { font-size: 12px; }
+
+      /* wallet mint */
+      .x-notice { display: grid; gap: 12px; padding: 12px 14px; font: 400 13px/1.6 var(--x-mono); color: var(--x-ink); background: var(--x-bg); border: 2px solid var(--x-line); }
+      .x-notice[hidden] { display: none; }
+      .x-notice--warn { border-color: var(--x-legendary); color: var(--x-legendary); }
+      .x-notice--err { border-color: #ff6b6b; color: #ffb3b3; }
+      .x-notice--ok { border-color: var(--x-lime); color: var(--x-lime); }
+      .x-notice a { color: inherit; display: inline-flex; align-items: center; min-height: var(--tap); }
+      .x-wstats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0; }
+      .x-wstats[hidden] { display: none; }
+      .x-wstats div { padding: 10px 12px; background: var(--x-panel-2); border: 2px solid var(--x-line); display: grid; gap: 6px; }
+      .x-wstats dt { font: 500 12px/1.3 var(--x-mono); color: var(--x-dim); }
+      .x-wstats dd { margin: 0; font: 400 13px/1.3 var(--x-pixel); color: var(--x-ink); }
+      .x-quote { display: grid; gap: 4px; }
+      .x-quote__total { font: 400 16px/1.4 var(--x-pixel); color: var(--x-lime); }
+      .x-live.is-off { color: var(--x-dim); }
+      .x-live.is-off::before { background: var(--x-dim); animation: none; }
+      .x-pills { display: flex; gap: 8px; overflow-x: auto; padding: 2px 6px 8px 2px; scrollbar-width: thin; }
+      .x-pill { flex: none; min-height: var(--tap); padding: 0 14px; font: 500 13px/1 var(--x-mono); color: var(--x-ink); background: var(--x-panel-2); border: 2px solid var(--x-line); cursor: pointer; white-space: nowrap; }
+      .x-pill:hover { border-color: var(--x-lime); }
+      .x-pill[aria-selected="true"], .x-pill.is-on { background: var(--x-lime); color: #0b1020; border-color: #000; box-shadow: 3px 3px 0 #000; }
+      .x-pills--sm .x-pill { font-size: 12px; min-height: var(--tap); }
+      .x-field { display: grid; gap: 8px; }
+      .x-label { font: 500 12px/1.4 var(--x-mono); color: var(--x-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+      .x-input, .x-textarea { width: 100%; box-sizing: border-box; min-height: var(--tap); padding: 10px 12px; font: 400 14px/1.5 var(--x-mono); color: var(--x-ink); background: var(--x-bg); border: 2px solid var(--x-line); border-radius: 0; }
+      .x-input:focus, .x-textarea:focus { outline: none; border-color: var(--x-lime); }
+      .x-textarea { min-height: 170px; resize: vertical; }
+      .x-stepper { display: inline-flex; align-items: stretch; border: 3px solid #000; box-shadow: 4px 4px 0 #000; width: fit-content; }
+      .x-stepper button { width: 52px; min-height: 52px; font: 400 18px/1 var(--x-pixel); background: var(--x-panel-2); color: var(--x-lime); border: 0; cursor: pointer; }
+      .x-stepper button:disabled { color: var(--x-line); cursor: not-allowed; }
+      .x-stepper output { display: grid; place-items: center; min-width: 64px; font: 400 18px/1 var(--x-pixel); background: var(--x-bg); color: var(--x-ink); }
+      .x-radio { display: flex; flex-wrap: wrap; gap: 8px; border: 0; padding: 0; margin: 0; }
+      .x-radio label { position: relative; }
+      .x-radio input { position: absolute; opacity: 0; inset: 0; }
+      .x-radio span { display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); padding: 0 14px; font: 500 13px/1 var(--x-mono); background: var(--x-panel-2); border: 2px solid var(--x-line); cursor: pointer; }
+      .x-radio small { color: var(--x-dim); font-size: 12px; }
+      .x-radio input:checked + span { border-color: var(--x-lime); color: var(--x-lime); box-shadow: 3px 3px 0 #000; }
+      .x-radio input:checked + span small { color: var(--x-lime); }
+      .x-radio input:focus-visible + span { outline: 2px solid var(--x-lime); outline-offset: 2px; }
+      .x-grid2 { display: grid; gap: 18px; }
+      @media (min-width: 760px) { .x-grid2 { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+      /* hero */
+      .x-hero { display: grid; gap: 0; border: 3px solid var(--x-line); box-shadow: 6px 6px 0 #000; background: var(--x-panel); }
+      .x-hero__img { width: 100%; aspect-ratio: 16 / 7; object-fit: cover; border-bottom: 3px solid var(--x-line); }
+      .x-hero__copy { padding: clamp(18px, 4vw, 32px); display: grid; gap: 18px; }
+      .x-hero h1 { font-size: clamp(24px, 7vw, 46px); color: var(--x-lime); text-shadow: 4px 4px 0 #000; }
+      .x-hero__sub { font-size: 16px; line-height: 1.6; max-width: 60ch; color: var(--x-ink); }
+      .x-counter { display: grid; gap: 10px; }
+      .x-counter__fig { font: 400 clamp(20px, 6vw, 34px)/1.2 var(--x-pixel); }
+      .x-counter__fig b { color: var(--x-lime); font-weight: 400; }
+      .x-live { display: inline-flex; align-items: center; gap: 8px; font: 500 13px/1 var(--x-mono); color: var(--x-lime); }
+      .x-live::before { content: ""; width: 10px; height: 10px; background: var(--x-lime); animation: x-blink 1s steps(2) infinite; }
+      @keyframes x-blink { 50% { opacity: 0.2; } }
+      @media (prefers-reduced-motion: reduce) { .x-live::before { animation: none; } }
+      .x-bar { height: 22px; border: 3px solid #000; background: var(--x-bg); box-shadow: 4px 4px 0 #000; }
+      .x-bar > span { display: block; height: 100%; background: repeating-linear-gradient(90deg, var(--x-lime) 0 14px, #8fd12a 14px 16px); }
+      .x-facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+      .x-facts li { display: flex; gap: 10px; font: 400 14px/1.5 var(--x-mono); }
+      .x-facts li::before { content: "■"; color: var(--x-lime); }
+      @media (min-width: 760px) { .x-facts { grid-template-columns: 1fr 1fr; } }
+
+      /* tab panels */
+      .x-tabpanel[hidden] { display: none; }
+      .x-prompt-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+      .x-hr { border: 0; border-top: 2px dashed var(--x-line); margin: 0; }
+
+      /* kinds */
+      .x-kinds { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+      .x-kind { background: var(--x-panel); border: 3px solid var(--x-line); box-shadow: 5px 5px 0 #000; display: grid; align-content: start; }
+      .x-kind img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--x-bg); border-bottom: 3px solid var(--x-line); }
+      .x-kind__body { padding: 14px; display: grid; gap: 10px; }
+      .x-kind__meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font: 500 12px/1 var(--x-mono); color: var(--x-dim); }
+      .x-kind p { font-size: 14px; line-height: 1.5; }
+      .x-traits { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+      .x-traits li { font: 400 12px/1 var(--x-mono); padding: 6px 8px; border: 1px solid var(--x-line); color: var(--x-dim); }
+      .x-rar { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; font: 500 12px/1 var(--x-mono); color: #0b1020; background: var(--r); border: 2px solid #000; }
+      .x-rar--common { --r: var(--x-common); } .x-rar--uncommon { --r: var(--x-uncommon); } .x-rar--rare { --r: var(--x-rare); } .x-rar--epic { --r: var(--x-epic); } .x-rar--legendary { --r: var(--x-legendary); }
+      .x-supply { display: flex; height: 28px; border: 3px solid #000; box-shadow: 4px 4px 0 #000; }
+      .x-supply span { background: var(--r); border-right: 2px solid #000; }
+      .x-supply span:last-child { border-right: 0; }
+      .x-supply-key { display: grid; gap: 6px; list-style: none; margin: 0; padding: 0; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
+      .x-supply-key li { display: flex; justify-content: space-between; gap: 8px; align-items: center; font: 400 13px/1.4 var(--x-mono); padding: 8px 0; border-bottom: 1px dashed var(--x-line); }
+
+      /* tiles */
+      .x-tiles { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+      .x-tile { background: var(--x-panel-2); border: 2px solid var(--x-line); display: grid; }
+      .x-tile img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--x-bg); }
+      .x-tile figcaption { padding: 6px; font: 400 12px/1.35 var(--x-mono); display: grid; }
+      .x-tile figcaption b { font-weight: 500; color: var(--x-lime); }
+      .x-tile figcaption span { color: var(--x-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .x-tile[hidden] { display: none; }
+      .x-tiles--dense { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 6px; }
+
+      /* market + result */
+      .x-market .num { font-family: var(--x-mono); color: var(--x-lime); }
+      .x-market th[scope="row"] { font-family: var(--x-mono); }
+      .x-result { padding: 14px; border: 2px solid var(--x-lime); background: var(--x-bg); font: 400 14px/1.6 var(--x-mono); }
+      .x-result[hidden] { display: none; }
+
+      /* toast */
+      .x-toast { position: fixed; left: 50%; bottom: 20px; z-index: 50; transform: translate(-50%, 140%); padding: 14px 18px; max-width: calc(100% - 40px); font: 400 12px/1.5 var(--x-pixel); background: var(--x-lime); color: #0b1020; border: 3px solid #000; box-shadow: 5px 5px 0 #000; transition: transform var(--dur-quick) var(--ease-out); }
+      .x-toast.is-on { transform: translate(-50%, 0); }
+
+      .x-foot { display: grid; gap: 14px; padding: 20px; border-top: 3px solid var(--x-line); font: 400 13px/1.6 var(--x-mono); color: var(--x-dim); }
+      .x-foot strong { font-family: var(--x-pixel); font-weight: 400; font-size: 12px; color: var(--x-lime); }
+      .x-foot p a { color: var(--x-lime); display: inline-flex; align-items: center; min-height: var(--tap); }
+      .x-foot nav { display: flex; flex-wrap: wrap; gap: 4px; }
+      .x-foot nav a { color: var(--x-ink); display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap); min-width: var(--tap); padding: 0 8px; }
+    </style>
+  </head>
+  <body class="x-body">
+    <div class="page" id="top">
+      <nav class="x-nav" aria-label="Main">
+        <a class="x-home" href="#top">← SEOLint World</a>
+        <a href="#gallery" data-i18n="navGallery">Gallery</a>
+        <a href="#market" data-i18n="navMarket">Market</a>
+        <a href="#kinds" data-i18n="navKinds">Kinds</a>
+        <button class="x-lang" type="button" id="lang-btn" aria-label="Switch language to Bahasa Indonesia">中文 / ID</button>
+      </nav>
+
+      <main class="main">
+        <section class="x-hero">
+          <img class="x-hero__img x-px" src="seolint_hero.png" alt="Pixel-art banner of SEOLint agents at work across a website skyline" />
+          <div class="x-hero__copy">
+            <p class="x-eyebrow">SEOLint World · BNB Chain</p>
+            <h1 data-i18n="heroTitle">Onchain Agents</h1>
+            <p class="x-hero__sub" data-i18n="heroSub">10,000 pixel SEO agents of SEOLint World, minted on BNB Chain.</p>
+            <div class="x-counter">
+              <p class="x-counter__fig"><b id="minted">—</b> / 10,000</p>
+              <p class="x-live is-off" id="mint-status">Minting opens soon</p>
+              <div class="x-bar" id="mint-bar" role="progressbar" aria-valuemin="0" aria-valuemax="10000" aria-valuenow="0" aria-label="Minted count not read yet"><span style="width: 0%"></span></div>
+            </div>
+            <ul class="x-facts">
+              <li>2 free mints per wallet — pay only a 0.0003 BNB fee each</li>
+              <li>Then 0.0015 BNB each (about $1)</li>
+              <li>12 per wallet at most</li>
+              <li>Each picture reveals one block after its mint, about half a second</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="x-panel" id="mint" aria-label="Mint and explore">
+          <div class="x-pills" role="tablist" aria-label="Ways to use this page">
+            <button class="x-pill" role="tab" id="t-prompt" aria-controls="p-prompt" aria-selected="true" data-i18n="tabPrompt">Prompts for agents</button>
+            <button class="x-pill" role="tab" id="t-wallet" aria-controls="p-wallet" aria-selected="false" tabindex="-1" data-i18n="tabWallet">Mint with a wallet</button>
+            <button class="x-pill" role="tab" id="t-kinds" aria-controls="p-kinds" aria-selected="false" tabindex="-1" data-i18n="tabKinds">All kinds</button>
+            <button class="x-pill" role="tab" id="t-latest" aria-controls="p-latest" aria-selected="false" tabindex="-1" data-i18n="tabLatest">Latest minted</button>
+            <button class="x-pill" role="tab" id="t-lookup" aria-controls="p-lookup" aria-selected="false" tabindex="-1" data-i18n="tabLookup">Look up a wallet</button>
+          </div>
+          <div class="x-pills x-pills--sm" id="actions" aria-label="Action">
+            <button class="x-pill is-on" type="button" aria-pressed="true" data-act="mint">Mint</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-act="buy">Buy</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-act="list">List for sale</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-act="delist">Take down</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-act="offer">Make an offer</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-act="accept">Accept an offer</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-act="cancel">Take back offers</button>
+          </div>
+          <hr class="x-hr" />
+
+          <!-- Prompts for agents -->
+          <div class="x-tabpanel" role="tabpanel" id="p-prompt" aria-labelledby="t-prompt">
+            <div class="x-panel" style="box-shadow:none;padding:0;border:0">
+              <h2 data-i18n="agentTitle">Mint with an agent</h2>
+              <p class="x-dim">No wallet needed here. Choose how many, then send the prompt below to an AI agent with a BNB wallet; it mints from its own wallet.</p>
+              <div class="x-grid2">
+                <div class="x-panel" style="box-shadow:none;padding:0;border:0">
+                  <div class="x-field">
+                    <span class="x-label" id="qty-a-l">How many</span>
+                    <div class="x-stepper" data-stepper id="qty-a" aria-labelledby="qty-a-l">
+                      <button type="button" data-step="-1" aria-label="One fewer">−</button>
+                      <output aria-live="polite">1</output>
+                      <button type="button" data-step="1" aria-label="One more">+</button>
+                    </div>
+                  </div>
+                  <p class="x-small">2 free mints per wallet — pay only a 0.0003 BNB fee each. Then 0.0015 BNB each (about $1). 12 per wallet at most. BNB only.</p>
+                  <div class="x-field">
+                    <label class="x-label" for="agent-wallet">The agent's wallet (optional)</label>
+                    <input class="x-input" id="agent-wallet" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+                  </div>
+                </div>
+                <div class="x-panel" style="box-shadow:none;padding:0;border:0">
+                  <div class="x-field">
+                    <span class="x-label">Prompt language</span>
+                    <div class="x-pills x-pills--sm" id="plang" style="padding-bottom:4px">
+                      <button class="x-pill is-on" type="button" aria-pressed="true" data-pl="en">English</button>
+                      <button class="x-pill" type="button" aria-pressed="false" data-pl="zh">中文</button>
+                      <button class="x-pill" type="button" aria-pressed="false" data-pl="id">Bahasa Indonesia</button>
+                    </div>
+                  </div>
+                  <div class="x-field">
+                    <label class="x-label" for="prompt">The prompt</label>
+                    <textarea class="x-textarea" id="prompt" readonly></textarea>
+                  </div>
+                  <div class="x-prompt-row">
+                    <button class="x-btn" type="button" id="copy" data-i18n="copy">Copy the prompt</button>
+                  </div>
+                </div>
+              </div>
+              <hr class="x-hr" />
+              <div style="display:grid;gap:4px">
+                <p class="x-small" data-contract-line>Contract: <a href="https://bscscan.com/address/0x438d4b4a867cDA7e8B1F673b5db7D8C5024493E1" target="_blank" rel="noopener">0x438d…93E1 ↗</a></p>
+                <p class="x-small">AI agents: read <a href="/agents/llms.txt">/agents/llms.txt</a> to mint by contract.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mint with a wallet -->
+          <div class="x-tabpanel" role="tabpanel" id="p-wallet" aria-labelledby="t-wallet" hidden>
+            <div class="x-panel" style="box-shadow:none;padding:0;border:0;max-width:560px">
+              <h2 data-i18n="tabWallet">Mint with a wallet</h2>
+              <p class="x-notice x-notice--warn" id="w-nocontract" hidden>Contract not deployed yet — mint opens after deploy</p>
+              <div class="x-field">
+                <div><button class="x-btn x-btn--ghost" type="button" id="w-connect">Connect wallet</button></div>
+                <p class="x-small" id="w-status" role="status" aria-live="polite">Not connected.</p>
+              </div>
+              <div class="x-notice x-notice--warn" id="w-nowallet" hidden>
+                <p>No wallet found. Open this page inside MetaMask, Trust Wallet or Binance Web3 Wallet's browser.</p>
+                <div class="x-prompt-row">
+                  <a class="x-btn x-btn--ghost" id="dl-mm" href="https://metamask.app.link/dapp/">Open in MetaMask</a>
+                  <a class="x-btn x-btn--ghost" id="dl-trust" href="https://link.trustwallet.com/open_url?coin_id=20000714">Open in Trust Wallet</a>
+                </div>
+              </div>
+              <dl class="x-wstats" id="w-stats" hidden>
+                <div><dt>Mint</dt><dd id="s-open">—</dd></div>
+                <div><dt>Minted so far</dt><dd id="s-supply">—</dd></div>
+                <div><dt>Your free mints left</dt><dd id="s-free">—</dd></div>
+                <div><dt>You've minted</dt><dd id="s-mine">— / 12</dd></div>
+              </dl>
+              <div class="x-field">
+                <span class="x-label" id="qty-w-l">How many</span>
+                <div class="x-stepper" data-stepper id="qty-w" aria-labelledby="qty-w-l">
+                  <button type="button" data-step="-1" aria-label="One fewer">−</button>
+                  <output aria-live="polite">1</output>
+                  <button type="button" data-step="1" aria-label="One more">+</button>
+                </div>
+              </div>
+              <div class="x-quote" aria-live="polite">
+                <p class="x-quote__total" id="q-total">Total: —</p>
+                <p class="x-small" id="q-break">Connect a wallet to see your price.</p>
+              </div>
+              <p class="x-small">2 free mints per wallet — pay only a 0.0003 BNB fee each. Then 0.0015 BNB each (about $1). 12 per wallet at most.</p>
+              <button class="x-btn x-btn--big" type="button" id="w-mint" disabled>Connect a wallet first</button>
+              <div class="x-notice" id="w-tx" role="status" aria-live="polite" hidden></div>
+            </div>
+          </div>
+
+          <!-- All kinds -->
+          <div class="x-tabpanel" role="tabpanel" id="p-kinds" aria-labelledby="t-kinds" hidden>
+            <div class="x-panel" style="box-shadow:none;padding:0;border:0">
+              <h2 data-i18n="supplyTitle">How the 10,000 split by kind</h2>
+              <div class="x-supply" aria-hidden="true">
+                <span class="x-rar--common" style="width:24%"></span><span class="x-rar--common" style="width:20%"></span><span class="x-rar--uncommon" style="width:15%"></span><span class="x-rar--uncommon" style="width:13%"></span><span class="x-rar--rare" style="width:10%"></span><span class="x-rar--rare" style="width:9%"></span><span class="x-rar--epic" style="width:6%"></span><span class="x-rar--legendary" style="width:3%"></span>
+              </div>
+              <ul class="x-supply-key">
+                <li>Crawler <span class="x-rar x-rar--common">2,400</span></li>
+                <li>Meta Tagger <span class="x-rar x-rar--common">2,000</span></li>
+                <li>Schema Smith <span class="x-rar x-rar--uncommon">1,500</span></li>
+                <li>Backlink Hunter <span class="x-rar x-rar--uncommon">1,300</span></li>
+                <li>Vitals Medic <span class="x-rar x-rar--rare">1,000</span></li>
+                <li>Canonical Keeper <span class="x-rar x-rar--rare">900</span></li>
+                <li>Sitemap Cartographer <span class="x-rar x-rar--epic">600</span></li>
+                <li>Regression Sentinel <span class="x-rar x-rar--legendary">300</span></li>
+              </ul>
+              <div><a class="x-btn x-btn--ghost" href="#kinds" data-i18n="seeKinds">See every kind ↓</a></div>
+            </div>
+          </div>
+
+          <!-- Latest minted -->
+          <div class="x-tabpanel" role="tabpanel" id="p-latest" aria-labelledby="t-latest" hidden>
+            <div class="x-panel" style="box-shadow:none;padding:0;border:0">
+              <h2 data-i18n="tabLatest">Latest minted</h2>
+              <div class="x-tiles x-px">
+                <figure class="x-tile"><img src="vitals-medic.png" alt="Vitals Medic" loading="lazy" /><figcaption><b>#7342</b><span>0x8a3f…12bc</span></figcaption></figure>
+                <figure class="x-tile"><img src="crawler.png" alt="Crawler" loading="lazy" /><figcaption><b>#7341</b><span>0x41de…9a07</span></figcaption></figure>
+                <figure class="x-tile"><img src="meta-tagger.png" alt="Meta Tagger" loading="lazy" /><figcaption><b>#7340</b><span>0xc9b2…44f1</span></figcaption></figure>
+                <figure class="x-tile"><img src="crawler.png" alt="Crawler" loading="lazy" /><figcaption><b>#7339</b><span>0x8a3f…12bc</span></figcaption></figure>
+                <figure class="x-tile"><img src="schema-smith.png" alt="Schema Smith" loading="lazy" /><figcaption><b>#7338</b><span>0x07ae…d3c8</span></figcaption></figure>
+                <figure class="x-tile"><img src="backlink-hunter.png" alt="Backlink Hunter" loading="lazy" /><figcaption><b>#7337</b><span>0xf210…6be5</span></figcaption></figure>
+                <figure class="x-tile"><img src="meta-tagger.png" alt="Meta Tagger" loading="lazy" /><figcaption><b>#7336</b><span>0x5c8d…0e2a</span></figcaption></figure>
+                <figure class="x-tile"><img src="canonical-keeper.png" alt="Canonical Keeper" loading="lazy" /><figcaption><b>#7335</b><span>0x9e47…b871</span></figcaption></figure>
+                <figure class="x-tile"><img src="crawler.png" alt="Crawler" loading="lazy" /><figcaption><b>#7334</b><span>0x2b61…c09d</span></figcaption></figure>
+                <figure class="x-tile"><img src="sitemap-cartographer.png" alt="Sitemap Cartographer" loading="lazy" /><figcaption><b>#7333</b><span>0xd4f9…7a13</span></figcaption></figure>
+                <figure class="x-tile"><img src="regression-sentinel.png" alt="Regression Sentinel" loading="lazy" /><figcaption><b>#7332</b><span>0x63a0…f5e6</span></figcaption></figure>
+                <figure class="x-tile"><img src="schema-smith.png" alt="Schema Smith" loading="lazy" /><figcaption><b>#7331</b><span>0xab17…2d94</span></figcaption></figure>
+              </div>
+            </div>
+          </div>
+
+          <!-- Look up a wallet -->
+          <div class="x-tabpanel" role="tabpanel" id="p-lookup" aria-labelledby="t-lookup" hidden>
+            <form class="x-panel" id="lookup" style="box-shadow:none;padding:0;border:0;max-width:620px">
+              <h2 data-i18n="tabLookup">Look up a wallet</h2>
+              <div class="x-field">
+                <label class="x-label" for="lookup-addr">Wallet address</label>
+                <input class="x-input" id="lookup-addr" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+              </div>
+              <div><button class="x-btn" type="submit" data-i18n="lookupBtn">Look up</button></div>
+              <p class="x-result" id="lookup-result" role="status" hidden>This wallet holds 3 agents: #0412 Crawler, #2210 Schema Smith, #6981 Regression Sentinel.</p>
+            </form>
+          </div>
+        </section>
+
+        <section class="x-panel" id="kinds" data-nav="Kinds" style="scroll-margin-top:80px">
+          <div style="display:grid;gap:10px">
+            <p class="x-eyebrow">8 kinds · 10,000 agents</p>
+            <h2 data-i18n="kindsTitle">All kinds</h2>
+            <p class="x-dim">Eight kinds of agent, each one a job SEOLint does on your site. Rarity is fixed at mint.</p>
+          </div>
+          <div class="x-kinds">
+            <article class="x-kind">
+              <img class="x-px" src="crawler.png" alt="Crawler, a pixel spider agent with a magnifier" loading="lazy" />
+              <div class="x-kind__body">
+                <h3>Crawler</h3>
+                <div class="x-kind__meta"><span class="x-rar x-rar--common">Common</span><span>2,400 supply</span></div>
+                <p>Walks every page and finds what's broken.</p>
+                <ul class="x-traits"><li>Magnifier</li><li>8 Legs</li><li>Green Field</li></ul>
+              </div>
+            </article>
+            <article class="x-kind">
+              <img class="x-px" src="meta-tagger.png" alt="Meta Tagger, a pixel agent holding a blank tag" loading="lazy" />
+              <div class="x-kind__body">
+                <h3>Meta Tagger</h3>
+                <div class="x-kind__meta"><span class="x-rar x-rar--common">Common</span><span>2,000 supply</span></div>
+                <p>Writes titles and descriptions that earn the click.</p>
+                <ul class="x-traits"><li>Blank Tag</li><li>Cyan Eyes</li><li>Sky Field</li></ul>
+              </div>
+            </article>
+            <article class="x-kind">
+              <img class="x-px" src="schema-smith.png" alt="Schema Smith, a pixel smith with a hammer and curly-brace apron" loading="lazy" />
+              <div class="x-kind__body">
+                <h3>Schema Smith</h3>
+                <div class="x-kind__meta"><span class="x-rar x-rar--uncommon">Uncommon</span><span>1,500 supply</span></div>
+                <p>Forges structured data so Google reads you right.</p>
+                <ul class="x-traits"><li>Hammer</li><li>{ } Apron</li><li>Visor</li></ul>
+              </div>
+            </article>
+            <article class="x-kind">
+              <img class="x-px" src="backlink-hunter.png" alt="Backlink Hunter, a pixel detective in a deerstalker" loading="lazy" />
+              <div class="x-kind__body">
+                <h3>Backlink Hunter</h3>
+                <div class="x-kind__meta"><span class="x-rar x-rar--uncommon">Uncommon</span><span>1,300 supply</span></div>
+                <p>Tracks down links worth earning.</p>
+                <ul class="x-traits"><li>Deerstalker</li><li>Chain Badge</li><li>Red Eyes</li></ul>
+              </div>
+            </article>
+            <article class="x-kind">
+              <img class="x-px" src="vitals-medic.png" alt="Vitals Medic, a pixel medic with a heartbeat screen" loading="lazy" />
+              <div class="x-kind__body">
+                <h3>Vitals Medic</h3>
+                <div class="x-kind__meta"><span class="x-rar x-rar--rare">Rare</span><span>1,000 supply</span></div>
+                <p>Keeps Core Web Vitals healthy: LCP, INP, CLS.</p>
+                <ul class="x-traits"><li>Red Cross</li><li>Heartbeat Screen</li><li>Pink Field</li></ul>
+              </div>
+            </article>
+            <article class="x-kind">
+              <img class="x-px" src="canonical-keeper.png" alt="Canonical Keeper, a pixel knight with a C shield and lance" loading="lazy" />
+              <div class="x-kind__body">
+                <h3>Canonical Keeper</h3>
+                <div class="x-kind__meta"><span class="x-rar x-rar--rare">Rare</span><span>900 supply</span></div>
+                <p>Guards against duplicate pages.</p>
+                <ul class="x-traits"><li>Plume Helm</li><li>C Shield</li><li>Lance</li></ul>
+              </div>
+            </article>
+            <article class="x-kind">
+              <img class="x-px" src="sitemap-cartographer.png" alt="Sitemap Cartographer, a pixel mapmaker with round glasses" loading="lazy" />
+              <div class="x-kind__body">
+                <h3>Sitemap Cartographer</h3>
+                <div class="x-kind__meta"><span class="x-rar x-rar--epic">Epic</span><span>600 supply</span></div>
+                <p>Maps every URL for the crawlers.</p>
+                <ul class="x-traits"><li>Round Glasses</li><li>Map Scroll</li><li>Gold Field</li></ul>
+              </div>
+            </article>
+            <article class="x-kind">
+              <img class="x-px" src="regression-sentinel.png" alt="Regression Sentinel, a pixel robot with a siren" loading="lazy" />
+              <div class="x-kind__body">
+                <h3>Regression Sentinel</h3>
+                <div class="x-kind__meta"><span class="x-rar x-rar--legendary">Legendary</span><span>300 supply</span></div>
+                <p>Sounds the siren when a fixed issue comes back.</p>
+                <ul class="x-traits"><li>Siren</li><li>Green Eyes</li><li>Grey Field</li></ul>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="x-panel" id="gallery" data-nav="Gallery" style="scroll-margin-top:80px">
+          <div style="display:grid;gap:10px">
+            <p class="x-eyebrow">Gallery</p>
+            <h2 data-i18n="galleryTitle">See all 10,000 in the gallery</h2>
+          </div>
+          <div class="x-pills x-pills--sm" id="filter" aria-label="Filter by kind">
+            <button class="x-pill is-on" type="button" aria-pressed="true" data-f="all" data-i18n="all">All</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-f="crawler">Crawler</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-f="meta">Meta Tagger</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-f="schema">Schema Smith</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-f="backlink">Backlink Hunter</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-f="vitals">Vitals Medic</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-f="canonical">Canonical Keeper</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-f="sitemap">Sitemap Cartographer</button>
+            <button class="x-pill" type="button" aria-pressed="false" data-f="sentinel">Regression Sentinel</button>
+          </div>
+          <div class="x-tiles x-tiles--dense x-px" id="gallery-grid">
+            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #0007" loading="lazy" /><figcaption><b>#0007</b></figcaption></figure>
+            <figure class="x-tile" data-kind="meta"><img src="meta-tagger.png" alt="Meta Tagger #0031" loading="lazy" /><figcaption><b>#0031</b></figcaption></figure>
+            <figure class="x-tile" data-kind="schema"><img src="schema-smith.png" alt="Schema Smith #0118" loading="lazy" /><figcaption><b>#0118</b></figcaption></figure>
+            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #0412" loading="lazy" /><figcaption><b>#0412</b></figcaption></figure>
+            <figure class="x-tile" data-kind="vitals"><img src="vitals-medic.png" alt="Vitals Medic #0560" loading="lazy" /><figcaption><b>#0560</b></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink"><img src="backlink-hunter.png" alt="Backlink Hunter #0733" loading="lazy" /><figcaption><b>#0733</b></figcaption></figure>
+            <figure class="x-tile" data-kind="meta"><img src="meta-tagger.png" alt="Meta Tagger #0891" loading="lazy" /><figcaption><b>#0891</b></figcaption></figure>
+            <figure class="x-tile" data-kind="sentinel"><img src="regression-sentinel.png" alt="Regression Sentinel #1024" loading="lazy" /><figcaption><b>#1024</b></figcaption></figure>
+            <figure class="x-tile" data-kind="canonical"><img src="canonical-keeper.png" alt="Canonical Keeper #1290" loading="lazy" /><figcaption><b>#1290</b></figcaption></figure>
+            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #1455" loading="lazy" /><figcaption><b>#1455</b></figcaption></figure>
+            <figure class="x-tile" data-kind="sitemap"><img src="sitemap-cartographer.png" alt="Sitemap Cartographer #1802" loading="lazy" /><figcaption><b>#1802</b></figcaption></figure>
+            <figure class="x-tile" data-kind="schema"><img src="schema-smith.png" alt="Schema Smith #2210" loading="lazy" /><figcaption><b>#2210</b></figcaption></figure>
+            <figure class="x-tile" data-kind="meta"><img src="meta-tagger.png" alt="Meta Tagger #2577" loading="lazy" /><figcaption><b>#2577</b></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink"><img src="backlink-hunter.png" alt="Backlink Hunter #3016" loading="lazy" /><figcaption><b>#3016</b></figcaption></figure>
+            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #3349" loading="lazy" /><figcaption><b>#3349</b></figcaption></figure>
+            <figure class="x-tile" data-kind="vitals"><img src="vitals-medic.png" alt="Vitals Medic #3870" loading="lazy" /><figcaption><b>#3870</b></figcaption></figure>
+            <figure class="x-tile" data-kind="meta"><img src="meta-tagger.png" alt="Meta Tagger #4102" loading="lazy" /><figcaption><b>#4102</b></figcaption></figure>
+            <figure class="x-tile" data-kind="canonical"><img src="canonical-keeper.png" alt="Canonical Keeper #4688" loading="lazy" /><figcaption><b>#4688</b></figcaption></figure>
+            <figure class="x-tile" data-kind="schema"><img src="schema-smith.png" alt="Schema Smith #5013" loading="lazy" /><figcaption><b>#5013</b></figcaption></figure>
+            <figure class="x-tile" data-kind="crawler"><img src="crawler.png" alt="Crawler #5521" loading="lazy" /><figcaption><b>#5521</b></figcaption></figure>
+            <figure class="x-tile" data-kind="sitemap"><img src="sitemap-cartographer.png" alt="Sitemap Cartographer #6144" loading="lazy" /><figcaption><b>#6144</b></figcaption></figure>
+            <figure class="x-tile" data-kind="sentinel"><img src="regression-sentinel.png" alt="Regression Sentinel #6981" loading="lazy" /><figcaption><b>#6981</b></figcaption></figure>
+            <figure class="x-tile" data-kind="backlink"><img src="backlink-hunter.png" alt="Backlink Hunter #7055" loading="lazy" /><figcaption><b>#7055</b></figcaption></figure>
+            <figure class="x-tile" data-kind="vitals"><img src="vitals-medic.png" alt="Vitals Medic #7342" loading="lazy" /><figcaption><b>#7342</b></figcaption></figure>
+          </div>
+          <p class="x-small" id="gallery-count">Showing 24 of 7,342 minted.</p>
+        </section>
+
+        <section class="x-panel x-market" id="market" data-nav="Market" style="scroll-margin-top:80px">
+          <div style="display:grid;gap:10px">
+            <p class="x-eyebrow">Market · demo listings</p>
+            <h2 data-i18n="marketTitle">For sale now</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th scope="col">Token</th><th scope="col">Kind</th><th scope="col">Price</th><th scope="col">Seller</th><th scope="col"><span class="x-small">Action</span></th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">#0733</th><td>Backlink Hunter</td><td class="num">0.004 BNB</td><td class="muted">0x41de…9a07</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
+                <tr><th scope="row">#1802</th><td>Sitemap Cartographer</td><td class="num">0.018 BNB</td><td class="muted">0xc9b2…44f1</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
+                <tr><th scope="row">#1024</th><td>Regression Sentinel</td><td class="num">0.0375 BNB</td><td class="muted">0x07ae…d3c8</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
+                <tr><th scope="row">#3870</th><td>Vitals Medic</td><td class="num">0.006 BNB</td><td class="muted">0xf210…6be5</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
+                <tr><th scope="row">#5521</th><td>Crawler</td><td class="num">0.0045 BNB</td><td class="muted">0x5c8d…0e2a</td><td><button class="x-btn" type="button" data-toast="Demo only">Buy</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <footer class="x-foot">
+        <p><strong>SEOLint World</strong> · Pixel SEO agents onchain. Prices and limits are the contract's own; this page only reads the chain and asks your wallet to send.</p>
+        <p data-contract-line>Contract: <a href="https://bscscan.com/address/0x438d4b4a867cDA7e8B1F673b5db7D8C5024493E1" target="_blank" rel="noopener">0x438d…93E1 ↗</a></p>
+        <nav aria-label="Back to sections"><a href="#top">Top</a><a href="#kinds">Kinds</a><a href="#gallery">Gallery</a><a href="#market">Market</a></nav>
+      </footer>
+    </div>
+    <div class="x-toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="hark.js"></script>
+    <script>
+      /* ============================================================
+         CONFIG — edit these two lines
+         ============================================================ */
+      const CONTRACT_ADDRESS = "0x438d4b4a867cDA7e8B1F673b5db7D8C5024493E1"; // SEOLintAgents on BNB Smart Chain mainnet
+      const CHAIN_ID_HEX = "0x38"; // BNB Smart Chain mainnet (testnet = 0x61)
+      /* ============================================================ */
+
+      (function () {
+        var $ = function (s, r) { return (r || document).querySelector(s); };
+        var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+
+        /* toast */
+        var toast = $("#toast"), tt;
+        function say(msg) { toast.textContent = msg; toast.classList.add("is-on"); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove("is-on"); }, 2200); }
+        $$("[data-toast]").forEach(function (b) { b.addEventListener("click", function () { say(b.getAttribute("data-toast")); }); });
+
+        /* tabs */
+        var tabs = $$('[role="tab"]');
+        function openTab(tab, focus) {
+          tabs.forEach(function (t) {
+            var on = t === tab;
+            t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1;
+            document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+          });
+          if (focus) tab.focus();
+        }
+        tabs.forEach(function (t, i) {
+          t.addEventListener("click", function () { openTab(t); });
+          t.addEventListener("keydown", function (e) {
+            var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+            if (d) { e.preventDefault(); openTab(tabs[(i + d + tabs.length) % tabs.length], true); }
+          });
+        });
+
+        /* single-choice pill groups */
+        function group(sel, attr, cb) {
+          var btns = $$(sel + " [" + attr + "]");
+          btns.forEach(function (b) {
+            b.addEventListener("click", function () {
+              btns.forEach(function (o) { o.classList.toggle("is-on", o === b); o.setAttribute("aria-pressed", o === b); });
+              cb(b.getAttribute(attr));
+            });
+          });
+        }
+
+        /* steppers */
+        var qty = { "qty-a": 1, "qty-w": 1 }, qmax = { "qty-a": 12, "qty-w": 12 }, redraw = {};
+        var onQty = { "qty-a": function () { build(); }, "qty-w": function () { wQuote(); } };
+        $$("[data-stepper]").forEach(function (s) {
+          var out = $("output", s), dec = $('[data-step="-1"]', s), inc = $('[data-step="1"]', s);
+          function draw() {
+            if (qty[s.id] > qmax[s.id]) qty[s.id] = Math.max(1, qmax[s.id]);
+            out.textContent = qty[s.id]; dec.disabled = qty[s.id] <= 1; inc.disabled = qty[s.id] >= qmax[s.id];
+          }
+          redraw[s.id] = draw;
+          [dec, inc].forEach(function (b) {
+            b.addEventListener("click", function () {
+              qty[s.id] = Math.min(qmax[s.id], Math.max(1, qty[s.id] + Number(b.getAttribute("data-step"))));
+              draw(); onQty[s.id]();
+            });
+          });
+          draw();
+        });
+
+        /* prompt */
+        var act = "mint", plang = "en", promptEl = $("#prompt"), walletEl = $("#agent-wallet");
+        var calls = {
+          mint: "mint(quantity)",
+          buy: "buy(tokenId=<TOKEN_ID>)",
+          list: "list(tokenId=<TOKEN_ID>, price=<PRICE_IN_BNB>)",
+          delist: "delist(tokenId=<TOKEN_ID>)",
+          offer: "makeOffer(tokenId=<TOKEN_ID>, amount=<AMOUNT_IN_BNB>)",
+          accept: "acceptOffer(tokenId=<TOKEN_ID>, offerId=<OFFER_ID>)",
+          cancel: "cancelOffers()"
+        };
+        var T = {
+          en: {
+            soon: "address coming soon",
+            lead: function (w) { return "You are an onchain agent. Using your wallet" + (w ? " " + w : "") + ", "; },
+            mint: function (n, a) { return "call mint(quantity) with quantity = " + n + " on the SEOLint Agents contract " + a + " on BNB Smart Chain. Read quote(yourWallet, quantity) first and send exactly that much BNB as value. Your first 2 mints cost only a 0.0003 BNB fee each."; },
+            other: function (c, a) { return "call " + c + " on the SEOLint Agents contract " + a + " on BNB Smart Chain. First check the current state on the contract, then confirm the total in BNB before sending."; }
+          },
+          zh: {
+            soon: "（地址即将公布）",
+            lead: function (w) { return "你是一个链上代理。请使用你的钱包" + (w ? " " + w + " " : "") + "，"; },
+            mint: function (n, a) { return "在 BNB Smart Chain 上调用 SEOLint Agents 合约 " + a + " 的 mint(quantity)，quantity = " + n + "。先读取 quote(yourWallet, quantity)，并以该数额的 BNB 作为 value 发送。你的前 2 次铸造每次只需 0.0003 BNB 手续费。"; },
+            other: function (c, a) { return "在 BNB Smart Chain 上调用 SEOLint Agents 合约 " + a + " 的 " + c + "。先在合约上检查当前状态，然后在发送前确认 BNB 总额。"; }
+          },
+          id: {
+            soon: "(alamat segera hadir)",
+            lead: function (w) { return "Kamu adalah agen onchain. Dengan dompetmu" + (w ? " " + w : "") + ", "; },
+            mint: function (n, a) { return "panggil mint(quantity) dengan quantity = " + n + " pada kontrak SEOLint Agents " + a + " di BNB Smart Chain. Baca quote(yourWallet, quantity) dulu dan kirim BNB persis sebesar itu sebagai value. 2 mint pertamamu hanya dikenai biaya 0.0003 BNB per mint."; },
+            other: function (c, a) { return "panggil " + c + " pada kontrak SEOLint Agents " + a + " di BNB Smart Chain. Periksa dulu status saat ini di kontrak, lalu konfirmasi total BNB sebelum mengirim."; }
+          }
+        };
+        function build() {
+          var n = qty["qty-a"], t = T[plang], w = walletEl.value.trim();
+          var addr = CONTRACT_ADDRESS || t.soon;
+          promptEl.value = t.lead(w) + (act === "mint" ? t.mint(n, addr) : t.other(calls[act], addr));
+        }
+        walletEl.addEventListener("input", build);
+        group("#plang", "data-pl", function (v) { plang = v; build(); });
+        group("#actions", "data-act", function (v) { act = v; build(); openTab($("#t-prompt")); });
+        build();
+
+        var copyBtn = $("#copy"), ct;
+        copyBtn.addEventListener("click", function () {
+          var text = promptEl.value, label = copyBtn.textContent;
+          promptEl.select(); promptEl.setSelectionRange(0, text.length);
+          var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+          if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).catch(function () {});
+          copyBtn.textContent = "✓ Copied";
+          copyBtn.setAttribute("aria-label", "Prompt copied");
+          say(ok || navigator.clipboard ? "Prompt copied" : "Prompt selected — copy it from the box");
+          clearTimeout(ct);
+          ct = setTimeout(function () { copyBtn.textContent = label; copyBtn.removeAttribute("aria-label"); }, 1800);
+        });
+
+        /* gallery filter */
+        var tiles = $$("#gallery-grid .x-tile"), count = $("#gallery-count");
+        group("#filter", "data-f", function (f) {
+          var shown = 0;
+          tiles.forEach(function (t) { var on = f === "all" || t.getAttribute("data-kind") === f; t.hidden = !on; if (on) shown++; });
+          count.textContent = "Showing " + shown + " of 7,342 minted.";
+        });
+
+        /* wallet lookup */
+        $("#lookup").addEventListener("submit", function (e) { e.preventDefault(); $("#lookup-result").hidden = false; });
+
+        /* ===== real wallet mint (EIP-1193, raw eth_call / eth_sendTransaction) ===== */
+        var CHAINS = {
+          "0x38": { chainId: "0x38", chainName: "BNB Smart Chain", nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 }, rpcUrls: ["https://bsc-dataseed.binance.org/"], blockExplorerUrls: ["https://bscscan.com"] },
+          "0x61": { chainId: "0x61", chainName: "BNB Smart Chain Testnet", nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 }, rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"], blockExplorerUrls: ["https://testnet.bscscan.com"] }
+        };
+        var WANT = CHAIN_ID_HEX.toLowerCase(), CHAIN = CHAINS[WANT] || CHAINS["0x38"], EXPLORER = CHAIN.blockExplorerUrls[0];
+        var SEL = { mint: "0xa0712d68", quote: "0x8f79306e", totalSupply: "0x18160ddd", freeLeft: "0xeb28217e", mintedBy: "0x3cef28d2", mintOpen: "0x24bbd049", price: "0xa035b1fe", freeMintFee: "0xa1e91c81" };
+        var MAX_PER_WALLET = 12, SUPPLY = 10000, WEI = BigInt("1000000000000000000");
+        var eth = window.ethereum;
+        var W = { account: null, chainId: null, open: null, supply: null, free: null, mine: null, price: null, fee: null, quote: null, qerr: "", busy: false, qseq: 0 };
+
+        function encUint(n) { return BigInt(n).toString(16).padStart(64, "0"); }
+        function encAddr(a) { return a.toLowerCase().replace(/^0x/, "").padStart(64, "0"); }
+        function short(a) { return a.slice(0, 6) + "…" + a.slice(-4); }
+        function fmtBNB(w) {
+          var whole = w / WEI, frac = (w % WEI).toString().padStart(18, "0").slice(0, 6).replace(/0+$/, "");
+          return whole.toLocaleString("en-US") + (frac ? "." + frac : "");
+        }
+        function call(data) {
+          return eth.request({ method: "eth_call", params: [{ to: CONTRACT_ADDRESS, data: data }, "latest"] }).then(function (r) {
+            if (!r || r === "0x") throw new Error("The contract returned nothing. Check the address and the network.");
+            return BigInt(r.slice(0, 66));
+          });
+        }
+        function errMsg(e) {
+          if (!e) return "Something went wrong.";
+          var code = e.code || (e.data && e.data.originalError && e.data.originalError.code);
+          if (code === 4001 || code === "ACTION_REJECTED") return "You rejected the request in your wallet.";
+          if (code === -32002) return "Your wallet already has a request open. Check the wallet window.";
+          var m = (e.data && e.data.message) || e.message || String(e);
+          if (/insufficient funds/i.test(m)) return "Not enough BNB in this wallet for the mint plus gas.";
+          var rev = m.match(/execution reverted:?\s*(.*)/i);
+          if (rev) return "The contract refused this mint" + (rev[1] ? ": " + rev[1] : ".");
+          return m.length > 200 ? m.slice(0, 200) + "…" : m;
+        }
+        function onRightChain() { return (W.chainId || "").toLowerCase() === WANT; }
+        function canRead() { return !!(eth && CONTRACT_ADDRESS && onRightChain()); }
+
+        var txBox = $("#w-tx");
+        function showTx(tone, text, hash) {
+          txBox.className = "x-notice" + (tone ? " x-notice--" + tone : "");
+          txBox.textContent = "";
+          var p = document.createElement("p"); p.textContent = text; txBox.appendChild(p);
+          if (hash) {
+            var a = document.createElement("a");
+            a.href = EXPLORER + "/tx/" + hash; a.target = "_blank"; a.rel = "noopener";
+            a.textContent = "View " + short(hash) + " on BscScan ↗";
+            txBox.appendChild(a);
+          }
+          txBox.hidden = false;
+        }
+
+        function updateHero() {
+          if (W.supply !== null) {
+            var n = Number(W.supply), pct = Math.min(100, (n / SUPPLY) * 100);
+            $("#minted").textContent = n.toLocaleString("en-US");
+            var bar = $("#mint-bar");
+            bar.setAttribute("aria-valuenow", n);
+            bar.setAttribute("aria-label", n.toLocaleString("en-US") + " of 10,000 minted");
+            $("span", bar).style.width = pct + "%";
+          }
+          var st = $("#mint-status"), live = W.open === true;
+          st.textContent = live ? "Minting is live" : "Minting opens soon";
+          st.classList.toggle("is-off", !live);
+        }
+
+        function blocker() {
+          if (!CONTRACT_ADDRESS) return "Contract not deployed yet";
+          if (!eth) return "No wallet found";
+          if (!W.account) return "Connect a wallet first";
+          if (!onRightChain()) return "Switch to " + CHAIN.chainName;
+          if (W.busy) return "Minting…";
+          if (W.open === null || W.mine === null) return "Reading the contract…";
+          if (!W.open) return "Mint is not open yet";
+          if (Number(W.mine) >= MAX_PER_WALLET) return "Wallet limit reached (12)";
+          if (W.quote === null) return W.qerr ? "Couldn't get a price" : "Getting price…";
+          return "";
+        }
+
+        function render() {
+          $("#w-nocontract").hidden = !!CONTRACT_ADDRESS;
+          var st = $("#w-status"), cbtn = $("#w-connect"), cb = { set hidden(v) { cbtn.parentNode.hidden = v; }, set textContent(v) { cbtn.textContent = v; } };
+          if (!eth) { st.textContent = "No wallet detected in this browser."; cb.hidden = false; cb.textContent = "Connect wallet"; }
+          else if (!W.account) { st.textContent = "Not connected."; cb.hidden = false; cb.textContent = "Connect wallet"; }
+          else if (!onRightChain()) { st.textContent = "Connected " + short(W.account) + " · ✗ wrong network (chain " + (W.chainId || "?") + "), switch to " + CHAIN.chainName; cb.hidden = false; cb.textContent = "Switch network"; }
+          else { st.textContent = "Connected " + short(W.account) + " · ✓ " + CHAIN.chainName; cb.hidden = true; }
+
+          var stats = $("#w-stats");
+          stats.hidden = !(W.account && canRead());
+          $("#s-open").textContent = W.open === null ? "—" : W.open ? "Open" : "Not open yet";
+          $("#s-supply").textContent = W.supply === null ? "—" : Number(W.supply).toLocaleString("en-US") + " / 10,000";
+          $("#s-free").textContent = W.free === null ? "—" : String(W.free);
+          $("#s-mine").textContent = (W.mine === null ? "—" : String(W.mine)) + " / 12";
+
+          var tot = $("#q-total"), br = $("#q-break"), q = qty["qty-w"];
+          if (!CONTRACT_ADDRESS) { tot.textContent = "Total: —"; br.textContent = "The price shows here once the contract is deployed."; }
+          else if (!W.account || !onRightChain()) { tot.textContent = "Total: —"; br.textContent = "Connect a wallet on " + CHAIN.chainName + " to see your price."; }
+          else if (W.quote === null) { tot.textContent = "Total: …"; br.textContent = W.qerr || "Reading the price from the contract…"; }
+          else {
+            tot.textContent = "Total: " + fmtBNB(W.quote) + " BNB";
+            var f = Math.min(Number(W.free || 0), q), p = q - f;
+            br.textContent = W.fee !== null && W.price !== null
+              ? f + " free mint" + (f === 1 ? "" : "s") + " × " + fmtBNB(W.fee) + " BNB fee + " + p + " paid × " + fmtBNB(W.price) + " BNB"
+              : "";
+          }
+
+          var mb = $("#w-mint"), why = blocker();
+          mb.disabled = !!why;
+          mb.textContent = why || "Mint " + q;
+          updateHero();
+        }
+
+        /* public JSON-RPC reads for visitors without a connected wallet */
+        var RPCS = WANT === "0x38" ? ["https://bsc-mainnet.public.blastapi.io", "https://bsc.meowrpc.com"] : [];
+        function rpcCall(url, data) {
+          return fetch(url, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: CONTRACT_ADDRESS, data: data }, "latest"] })
+          }).then(function (r) { return r.json(); }).then(function (j) {
+            if (!j || !j.result || j.result === "0x") throw new Error("rpc");
+            return BigInt(j.result.slice(0, 66));
+          });
+        }
+        function readViaRpc(i) {
+          if (!CONTRACT_ADDRESS || !window.fetch || i >= RPCS.length) return Promise.resolve();
+          var url = RPCS[i];
+          return Promise.all([rpcCall(url, SEL.mintOpen), rpcCall(url, SEL.totalSupply)]).then(function (r) {
+            if (W.account && canRead()) return; // wallet data takes over
+            W.open = r[0] !== BigInt(0); W.supply = r[1]; render();
+          }).catch(function () { return readViaRpc(i + 1); });
+        }
+        function readPublic() {
+          if (!canRead()) return readViaRpc(0);
+          return Promise.all([call(SEL.mintOpen), call(SEL.totalSupply)]).then(function (r) {
+            W.open = r[0] !== BigInt(0); W.supply = r[1]; render();
+          }).catch(function () { return readViaRpc(0); });
+        }
+
+        function refresh() {
+          if (!W.account || !canRead()) { render(); return Promise.resolve(); }
+          var acc = encAddr(W.account);
+          return Promise.all([
+            call(SEL.mintOpen), call(SEL.totalSupply), call(SEL.freeLeft + acc), call(SEL.mintedBy + acc), call(SEL.price), call(SEL.freeMintFee)
+          ]).then(function (r) {
+            W.open = r[0] !== BigInt(0); W.supply = r[1]; W.free = r[2]; W.mine = r[3]; W.price = r[4]; W.fee = r[5];
+            qmax["qty-w"] = Math.max(0, MAX_PER_WALLET - Number(W.mine));
+            redraw["qty-w"]();
+            render();
+            return wQuote();
+          }).catch(function (e) { W.qerr = errMsg(e); render(); });
+        }
+
+        function wQuote() {
+          if (!W.account || !canRead() || W.mine === null) { W.quote = null; render(); return Promise.resolve(); }
+          var seq = ++W.qseq, q = qty["qty-w"];
+          W.quote = null; W.qerr = ""; render();
+          if (Number(W.mine) >= MAX_PER_WALLET) return Promise.resolve();
+          return call(SEL.quote + encAddr(W.account) + encUint(q)).then(function (v) {
+            if (seq === W.qseq) { W.quote = v; render(); }
+          }).catch(function (e) {
+            if (seq === W.qseq) { W.quote = null; W.qerr = errMsg(e); render(); }
+          });
+        }
+
+        function ensureChain() {
+          return eth.request({ method: "wallet_switchEthereumChain", params: [{ chainId: CHAIN.chainId }] }).catch(function (e) {
+            var code = e && (e.code || (e.data && e.data.originalError && e.data.originalError.code));
+            if (code === 4902) return eth.request({ method: "wallet_addEthereumChain", params: [CHAIN] });
+            throw e;
+          });
+        }
+
+        function connect() {
+          if (!eth) {
+            $("#dl-mm").href = "https://metamask.app.link/dapp/" + location.host + location.pathname;
+            $("#dl-trust").href = "https://link.trustwallet.com/open_url?coin_id=20000714&url=" + encodeURIComponent(location.href);
+            $("#w-nowallet").hidden = false;
+            return;
+          }
+          eth.request({ method: "eth_requestAccounts" })
+            .then(function (acc) { W.account = acc && acc[0] ? acc[0] : null; render(); return ensureChain(); })
+            .then(function () { return eth.request({ method: "eth_chainId" }); })
+            .then(function (c) { W.chainId = c; return refresh(); })
+            .catch(function (e) {
+              showTx("err", errMsg(e));
+              eth.request({ method: "eth_chainId" }).then(function (c) { W.chainId = c; render(); }).catch(function () {});
+            });
+        }
+
+        function waitReceipt(hash) {
+          return new Promise(function (resolve) {
+            var t = setInterval(function () {
+              eth.request({ method: "eth_getTransactionReceipt", params: [hash] }).then(function (r) {
+                if (r) { clearInterval(t); resolve(r); }
+              }).catch(function () {});
+            }, 2000);
+          });
+        }
+
+        function mint() {
+          if (blocker()) return;
+          var q = qty["qty-w"], value = W.quote, txHash = null;
+          W.busy = true; render();
+          showTx("", "Confirm the transaction in your wallet…");
+          eth.request({ method: "eth_sendTransaction", params: [{ from: W.account, to: CONTRACT_ADDRESS, value: "0x" + value.toString(16), data: SEL.mint + encUint(q) }] })
+            .then(function (hash) { txHash = hash; showTx("", "Pending… waiting for BNB Smart Chain to confirm.", hash); return waitReceipt(hash); })
+            .then(function (rc) {
+              W.busy = false;
+              if (rc.status === "0x1") { showTx("ok", "Minted! 🎉", txHash); say("Minted! 🎉"); }
+              else showTx("err", "The transaction failed onchain (reverted). No agents were minted.", txHash);
+              refresh();
+            })
+            .catch(function (e) { W.busy = false; showTx("err", errMsg(e), txHash); render(); });
+        }
+
+        $("#w-connect").addEventListener("click", connect);
+        $("#w-mint").addEventListener("click", mint);
+
+        /* contract address lines */
+        $$("[data-contract-line]").forEach(function (el) {
+          if (!CONTRACT_ADDRESS) { el.textContent = "Contract: coming soon"; return; }
+          el.textContent = "Contract: ";
+          var a = document.createElement("a");
+          a.href = EXPLORER + "/address/" + CONTRACT_ADDRESS; a.target = "_blank"; a.rel = "noopener";
+          a.textContent = short(CONTRACT_ADDRESS) + " ↗";
+          el.appendChild(a);
+        });
+
+        if (eth) {
+          if (eth.on) {
+            eth.on("accountsChanged", function (acc) {
+              W.account = acc && acc[0] ? acc[0] : null;
+              W.free = W.mine = W.quote = null; qmax["qty-w"] = MAX_PER_WALLET; redraw["qty-w"]();
+              refresh();
+            });
+            eth.on("chainChanged", function (c) { W.chainId = c; W.quote = null; refresh().then(readPublic); });
+          }
+          Promise.all([eth.request({ method: "eth_accounts" }), eth.request({ method: "eth_chainId" })])
+            .then(function (r) { W.account = r[0] && r[0][0] ? r[0][0] : null; W.chainId = r[1]; return refresh(); })
+            .then(readPublic)
+            .catch(function () { render(); readViaRpc(0); });
+        } else {
+          readViaRpc(0);
+        }
+        render();
+
+        /* page language: EN / ID */
+        var ID = {
+          navGallery: "Galeri", navMarket: "Pasar", navKinds: "Jenis",
+          heroTitle: "Agen Onchain",
+          heroSub: "10.000 agen SEO piksel dari SEOLint World, dicetak di BNB Chain.",
+          tabPrompt: "Prompt untuk agen", tabWallet: "Mint dengan dompet", tabKinds: "Semua jenis", tabLatest: "Terbaru dicetak", tabLookup: "Cari dompet",
+          agentTitle: "Mint dengan agen", copy: "Salin prompt", connect: "Hubungkan dompet",
+          supplyTitle: "Pembagian 10.000 per jenis", seeKinds: "Lihat semua jenis ↓",
+          kindsTitle: "Semua jenis", galleryTitle: "Lihat semua 10.000 di galeri", all: "Semua",
+          marketTitle: "Dijual sekarang", lookupBtn: "Cari"
+        };
+        var els = $$("[data-i18n]"), langBtn = $("#lang-btn"), isID = false;
+        els.forEach(function (el) { el.setAttribute("data-en", el.textContent); });
+        langBtn.addEventListener("click", function () {
+          isID = !isID;
+          els.forEach(function (el) { var k = el.getAttribute("data-i18n"); el.textContent = isID && ID[k] ? ID[k] : el.getAttribute("data-en"); });
+          document.documentElement.lang = isID ? "id" : "en";
+          langBtn.textContent = isID ? "EN" : "中文 / ID";
+          langBtn.setAttribute("aria-label", isID ? "Switch language to English" : "Switch language to Bahasa Indonesia");
+        });
+      })();
+    </script>
+  </body>
+</html>
