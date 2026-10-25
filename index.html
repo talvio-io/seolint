@@ -193,7 +193,7 @@
         <a href="#gallery" data-i18n="navGallery">Gallery</a>
         <a href="#market" data-i18n="navMarket">Market</a>
         <a href="#kinds" data-i18n="navKinds">Kinds</a>
-        <button class="x-lang" type="button" id="lang-btn" aria-label="Switch language to Bahasa Indonesia">中文 / ID</button>
+        <button class="x-lang" type="button" id="lang-btn" aria-label="切换到中文">中文</button>
       </nav>
 
       <main class="main">
@@ -263,7 +263,6 @@
                     <div class="x-pills x-pills--sm" id="plang" style="padding-bottom:4px">
                       <button class="x-pill is-on" type="button" aria-pressed="true" data-pl="en">English</button>
                       <button class="x-pill" type="button" aria-pressed="false" data-pl="zh">中文</button>
-                      <button class="x-pill" type="button" aria-pressed="false" data-pl="id">Bahasa Indonesia</button>
                     </div>
                   </div>
                   <div class="x-field">
@@ -637,12 +636,6 @@
             lead: function (w) { return "你是一个链上代理。请使用你的钱包" + (w ? " " + w + " " : "") + "，"; },
             mint: function (n, a) { return "在 BNB Smart Chain 上调用 SEOLint Agents 合约 " + a + " 的 mint(quantity)，quantity = " + n + "。先读取 quote(yourWallet, quantity)，并以该数额的 BNB 作为 value 发送。你的前 2 次铸造每次只需 0.0003 BNB 手续费。"; },
             other: function (c, a) { return "在 BNB Smart Chain 上调用 SEOLint Agents 合约 " + a + " 的 " + c + "。先在合约上检查当前状态，然后在发送前确认 BNB 总额。"; }
-          },
-          id: {
-            soon: "(alamat segera hadir)",
-            lead: function (w) { return "Kamu adalah agen onchain. Dengan dompetmu" + (w ? " " + w : "") + ", "; },
-            mint: function (n, a) { return "panggil mint(quantity) dengan quantity = " + n + " pada kontrak SEOLint Agents " + a + " di BNB Smart Chain. Baca quote(yourWallet, quantity) dulu dan kirim BNB persis sebesar itu sebagai value. 2 mint pertamamu hanya dikenai biaya 0.0003 BNB per mint."; },
-            other: function (c, a) { return "panggil " + c + " pada kontrak SEOLint Agents " + a + " di BNB Smart Chain. Periksa dulu status saat ini di kontrak, lalu konfirmasi total BNB sebelum mengirim."; }
           }
         };
         function build() {
@@ -675,10 +668,10 @@
           tiles.forEach(function (t) {
             var on = gf === "all" || t.getAttribute("data-kind") === gf; t.hidden = !on; if (on) shown++;
             var id = Number(t.getAttribute("data-id")), st = $("[data-gstat]", t);
-            st.textContent = s === null ? "…" : id <= s ? "Minted" : L("Available", "Tersedia");
+            st.textContent = s === null ? "…" : id <= s ? "Minted" : L("Available", "可铸造");
             st.classList.toggle("is-minted", s !== null && id <= s);
           });
-          count.textContent = L("Showing " + shown + " of tokens #1–#24.", "Menampilkan " + shown + " dari token #1–#24.");
+          count.textContent = L("Showing " + shown + " of tokens #1–#24.", "显示 #1–#24 中的 " + shown + " 个。");
         }
         group("#filter", "data-f", function (f) { gf = f; renderGallery(); });
 
@@ -688,10 +681,10 @@
           var out = $("#lookup-result");
           if (!LK) { out.hidden = true; return; }
           out.hidden = false;
-          out.textContent = LK.s === "wait" ? L("Checking…", "Memeriksa…")
-            : LK.s === "bad" ? L("Enter a full 0x address (42 characters).", "Masukkan alamat 0x lengkap (42 karakter).")
-            : LK.s === "err" ? L("Couldn't read the chain. Try again in a moment.", "Tidak bisa membaca chain. Coba lagi sebentar lagi.")
-            : L("This wallet holds " + fmtN(LK.n) + " agent" + (LK.n === 1 ? "" : "s") + ".", "Wallet ini memegang " + fmtN(LK.n) + " agent.");
+          out.textContent = LK.s === "wait" ? L("Checking…", "查询中…")
+            : LK.s === "bad" ? L("Enter a full 0x address (42 characters).", "请输入完整的 0x 地址（42 个字符）。")
+            : LK.s === "err" ? L("Couldn't read the chain. Try again in a moment.", "无法读取链上数据，请稍后再试。")
+            : L("This wallet holds " + fmtN(LK.n) + " agent" + (LK.n === 1 ? "" : "s") + ".", "该钱包持有 " + fmtN(LK.n) + " 个代理。");
         }
         $("#lookup").addEventListener("submit", function (e) {
           e.preventDefault();
@@ -751,7 +744,7 @@
           if (hash) {
             var a = document.createElement("a");
             a.href = EXPLORER + "/tx/" + hash; a.target = "_blank"; a.rel = "noopener";
-            a.textContent = L("View " + short(hash) + " on BscScan ↗", "Lihat " + short(hash) + " di BscScan ↗");
+            a.textContent = L("View " + short(hash) + " on BscScan ↗", "在 BscScan 查看 " + short(hash) + " ↗");
             box.appendChild(a);
           }
           box.hidden = false;
@@ -947,14 +940,14 @@
 
         /* ===== kinds ===== */
         var KIND = [
-          { n: "Crawler", r: "common", en: "Common", id: "Umum" },
-          { n: "Meta Tagger", r: "common", en: "Common", id: "Umum" },
-          { n: "Schema Smith", r: "uncommon", en: "Uncommon", id: "Tidak umum" },
-          { n: "Backlink Hunter", r: "uncommon", en: "Uncommon", id: "Tidak umum" },
-          { n: "Vitals Medic", r: "rare", en: "Rare", id: "Langka" },
-          { n: "Canonical Keeper", r: "rare", en: "Rare", id: "Langka" },
-          { n: "Sitemap Cartographer", r: "epic", en: "Epic", id: "Epik" },
-          { n: "Regression Sentinel", r: "legendary", en: "Legendary", id: "Legendaris" }
+          { n: "Crawler", r: "common", en: "Common", id: "普通" },
+          { n: "Meta Tagger", r: "common", en: "Common", id: "普通" },
+          { n: "Schema Smith", r: "uncommon", en: "Uncommon", id: "罕见" },
+          { n: "Backlink Hunter", r: "uncommon", en: "Uncommon", id: "罕见" },
+          { n: "Vitals Medic", r: "rare", en: "Rare", id: "稀有" },
+          { n: "Canonical Keeper", r: "rare", en: "Rare", id: "稀有" },
+          { n: "Sitemap Cartographer", r: "epic", en: "Epic", id: "史诗" },
+          { n: "Regression Sentinel", r: "legendary", en: "Legendary", id: "传说" }
         ];
         var KIMG = $$(".x-kind > img"), KTOTAL = [0, 0, 0, 0, 0, 0, 0, 0];
         for (var ki = 0; ki < KINDS.length; ki++) KTOTAL[+KINDS[ki]]++;
@@ -995,11 +988,11 @@
 
           /* summary */
           var fig = $("#mk-left"), bar = $("#mk-bar");
-          if (left === null) fig.textContent = L("… / 10,000 left", "Tersisa … / 10,000");
+          if (left === null) fig.textContent = L("… / 10,000 left", "剩余 … / 10,000");
           else {
-            fig.textContent = L(fmtN(left) + " / 10,000 left", "Tersisa " + fmtN(left) + " / 10,000");
+            fig.textContent = L(fmtN(left) + " / 10,000 left", "剩余 " + fmtN(left) + " / 10,000");
             bar.setAttribute("aria-valuenow", left);
-            bar.setAttribute("aria-label", L(fmtN(left) + " of 10,000 left", "Tersisa " + fmtN(left) + " dari 10,000"));
+            bar.setAttribute("aria-label", L(fmtN(left) + " of 10,000 left", "10,000 中剩余 " + fmtN(left)));
             $("span", bar).style.width = (left / SUPPLY) * 100 + "%";
           }
 
@@ -1019,39 +1012,39 @@
           /* status line */
           var a = mAllowed(), st = $("#mk-status"), free = W.free === null ? 0 : Number(W.free);
           var feeTxt = W.fee !== null ? fmtBNB(W.fee) : "0.0003";
-          if (!CONTRACT_ADDRESS) st.textContent = L("Contract not deployed yet.", "Kontrak belum di-deploy.");
+          if (!CONTRACT_ADDRESS) st.textContent = L("Contract not deployed yet.", "合约尚未部署。");
           else if (a !== null) st.textContent = L(
             "Connected " + short(W.account) + " · " + free + " free mint" + (free === 1 ? "" : "s") + " left · " + W.mine + " / 12 minted",
-            "Terhubung " + short(W.account) + " · sisa " + free + " mint gratis · " + W.mine + " / 12 di-mint") + (M.qerr ? " · " + M.qerr : "");
-          else if (W.account && !onRightChain()) st.textContent = L("Wrong network. Tap Buy to switch to " + CHAIN.chainName + ".", "Jaringan salah. Ketuk Beli untuk pindah ke " + CHAIN.chainName + ".");
-          else st.textContent = L("Prices for your wallet show once it is connected.", "Harga untuk wallet kamu muncul setelah terhubung.");
+            "已连接 " + short(W.account) + " · 剩余 " + free + " 次免费铸造 · 已铸造 " + W.mine + " / 12") + (M.qerr ? " · " + M.qerr : "");
+          else if (W.account && !onRightChain()) st.textContent = L("Wrong network. Tap Buy to switch to " + CHAIN.chainName + ".", "网络错误。点击购买以切换到 " + CHAIN.chainName + "。");
+          else st.textContent = L("Prices for your wallet show once it is connected.", "连接钱包后显示你的价格。");
 
           /* up next */
           var nb = $("#mk-next"); nb.textContent = "";
           function msgRow(t) { var tr = el("tr"), th = el("th", null, "—"); th.scope = "row"; tr.appendChild(th); var td = el("td", "muted", t); td.colSpan = 3; tr.appendChild(td); nb.appendChild(tr); }
-          if (s === null) { msgRow(L("Reading the chain…", "Membaca chain…")); return; }
-          if (left <= 0) { msgRow(L("Sold out: all 10,000 are minted.", "Habis: semua 10,000 sudah di-mint.")); return; }
+          if (s === null) { msgRow(L("Reading the chain…", "正在读取链上数据…")); return; }
+          if (left <= 0) { msgRow(L("Sold out: all 10,000 are minted.", "已售罄：10,000 个已全部铸造。")); return; }
           var n = Math.min(NEXT, left);
           for (var k = 1; k <= n; k++) {
             var id = s + k, kd = kindOf(id), tr = el("tr"), th = el("th", null, "#" + id); th.scope = "row"; tr.appendChild(th);
             var tk = el("td"); tk.appendChild(kcell(kd)); tr.appendChild(tk);
-            var tp = el("td", "num"), btn = el("button", "x-btn", L("Buy", "Beli")); btn.type = "button";
-            btn.setAttribute("aria-label", L("Buy up to #" + id, "Beli sampai #" + id));
+            var tp = el("td", "num"), btn = el("button", "x-btn", L("Buy", "购买")); btn.type = "button";
+            btn.setAttribute("aria-label", L("Buy up to #" + id, "购买至 #" + id));
             if (a === null) {
               tp.className = "";
-              tp.appendChild(el("span", null, L("0.0015 BNB (first 2: fee 0.0003 BNB)", "0.0015 BNB (2 pertama: fee 0.0003 BNB)")));
+              tp.appendChild(el("span", null, L("0.0015 BNB (first 2: fee 0.0003 BNB)", "0.0015 BNB（前 2 个：手续费 0.0003 BNB）")));
               btn.addEventListener("click", function () { connect(mkBox); });
             } else if (k > a) {
-              tp.textContent = "—"; btn.disabled = true; btn.textContent = L("Limit 12 per wallet", "Batas 12 per wallet"); btn.removeAttribute("aria-label");
+              tp.textContent = "—"; btn.disabled = true; btn.textContent = L("Limit 12 per wallet", "每个钱包限 12 个"); btn.removeAttribute("aria-label");
             } else {
               var q = M.quotes[k - 1];
               if (q === undefined) tp.textContent = M.qerr ? "—" : "…";
               else {
-                tp.textContent = L("Total ", "Total ") + fmtBNB(q) + " BNB";
-                tp.appendChild(el("small", null, k <= free ? L("free + fee " + feeTxt + " BNB", "gratis + fee " + feeTxt + " BNB") : L(k + " tokens in total", k + " token total")));
+                tp.textContent = L("Total ", "总计 ") + fmtBNB(q) + " BNB";
+                tp.appendChild(el("small", null, k <= free ? L("free + fee " + feeTxt + " BNB", "免费 + 手续费 " + feeTxt + " BNB") : L(k + " tokens in total", "共 " + k + " 个")));
               }
               if (W.busy) { btn.disabled = true; btn.textContent = "…"; }
-              else if (W.open === false) { btn.disabled = true; btn.textContent = L("Mint not open yet", "Mint belum dibuka"); }
+              else if (W.open === false) { btn.disabled = true; btn.textContent = L("Mint not open yet", "铸造尚未开放"); }
               else if (q === undefined) btn.disabled = true;
               else btn.addEventListener("click", (function (kk) { return function () { buyK(kk); }; })(k));
             }
@@ -1065,15 +1058,15 @@
           var value = M.quotes[k - 1], a = mAllowed(), txHash = null;
           if (W.busy || value === undefined || a === null || k > a || !W.open) return;
           W.busy = true; render();
-          showTx("", L("Confirm the transaction in your wallet…", "Konfirmasi transaksi di wallet kamu…"), null, mkBox);
+          showTx("", L("Confirm the transaction in your wallet…", "请在钱包中确认交易…"), null, mkBox);
           eth.request({ method: "eth_sendTransaction", params: [{ from: W.account, to: CONTRACT_ADDRESS, value: "0x" + value.toString(16), data: SEL.mint + encUint(k) }] })
-            .then(function (hash) { txHash = hash; showTx("", L("Pending… waiting for BNB Smart Chain to confirm.", "Menunggu… BNB Smart Chain sedang mengonfirmasi."), hash, mkBox); return waitReceipt(hash); })
+            .then(function (hash) { txHash = hash; showTx("", L("Pending… waiting for BNB Smart Chain to confirm.", "等待中… BNB Smart Chain 正在确认。"), hash, mkBox); return waitReceipt(hash); })
             .then(function (rc) {
               W.busy = false;
               if (rc.status === "0x1") {
-                var msg = L("Bought! " + k + " agent" + (k === 1 ? "" : "s") + " minted to your wallet 🎉", "Berhasil! " + k + " agent di-mint ke wallet kamu 🎉");
+                var msg = L("Bought! " + k + " agent" + (k === 1 ? "" : "s") + " minted to your wallet 🎉", "成功！已向你的钱包铸造 " + k + " 个代理 🎉");
                 showTx("ok", msg, txHash, mkBox); say(msg);
-              } else showTx("err", L("The transaction failed onchain (reverted). No agents were minted.", "Transaksi gagal onchain (revert). Tidak ada agent yang di-mint."), txHash, mkBox);
+              } else showTx("err", L("The transaction failed onchain (reverted). No agents were minted.", "链上交易失败（已回滚），未铸造任何代理。"), txHash, mkBox);
               refresh();
             })
             .catch(function (e) { W.busy = false; showTx("err", errMsg(e), txHash, mkBox); render(); });
@@ -1087,11 +1080,11 @@
           if (sig === LT.sig) return;
           LT.sig = sig;
           grid.textContent = "";
-          if (s === null) { st.textContent = L("Reading the chain…", "Membaca chain…"); empty.hidden = true; return; }
-          if (s === 0) { st.textContent = L("No one has minted yet. Be the first!", "Belum ada yang mint. Jadilah yang pertama!"); empty.hidden = false; return; }
+          if (s === null) { st.textContent = L("Reading the chain…", "正在读取链上数据…"); empty.hidden = true; return; }
+          if (s === 0) { st.textContent = L("No one has minted yet. Be the first!", "还没有人铸造，成为第一个吧！"); empty.hidden = false; return; }
           empty.hidden = true;
           var lo = Math.max(1, s - 11);
-          st.textContent = L("The last " + (s - lo + 1) + " minted, newest first.", (s - lo + 1) + " terakhir di-mint, terbaru dulu.");
+          st.textContent = L("The last " + (s - lo + 1) + " minted, newest first.", "最近铸造的 " + (s - lo + 1) + " 个，最新在前。");
           for (var id = s; id >= lo; id--) (function (id) {
             var k = kindOf(id), fig = el("figure", "x-tile"), cap = el("figcaption");
             fig.appendChild(kimg(k, KIND[k].n + " #" + id));
@@ -1101,7 +1094,7 @@
             cap.appendChild(own); fig.appendChild(cap); grid.appendChild(fig);
             function setOwner(addr) {
               own.textContent = short(addr); own.href = EXPLORER + "/address/" + addr;
-              own.setAttribute("aria-label", L("Owner ", "Pemilik ") + addr + L(" on BscScan", " di BscScan"));
+              own.setAttribute("aria-label", L("Owner ", "持有者 ") + addr + L(" on BscScan", "（BscScan）"));
             }
             if (LT.owners[id]) setOwner(LT.owners[id]);
             else rawRead(SEL.ownerOf + encUint(id)).then(function (r) {
@@ -1140,30 +1133,30 @@
         }
         render();
 
-        /* page language: EN / ID */
+        /* page language: EN / 中文 */
         var ID = {
-          navGallery: "Galeri", navMarket: "Pasar", navKinds: "Jenis",
-          heroTitle: "Agen Onchain",
-          heroSub: "10.000 agen SEO piksel dari SEOLint World, dicetak di BNB Chain.",
-          tabPrompt: "Prompt untuk agen", tabWallet: "Mint dengan dompet", tabKinds: "Semua jenis", tabLatest: "Terbaru dicetak", tabLookup: "Cari dompet",
-          agentTitle: "Mint dengan agen", copy: "Salin prompt", connect: "Hubungkan dompet",
-          supplyTitle: "Pembagian 10.000 per jenis", seeKinds: "Lihat semua jenis ↓",
-          kindsTitle: "Semua jenis", galleryTitle: "Lihat semua 10.000 di galeri", all: "Semua",
-          marketEyebrow: "Pasar · Sisa suplai", marketTitle: "Beli dari suplai tersisa", lookupBtn: "Cari",
-          mkKindsTitle: "Sisa per jenis", mkNextTitle: "Berikutnya yang akan di-mint",
-          colKind: "Jenis", colRarity: "Kelangkaan", colLeft: "Tersisa", colTotal: "Total suplai", colPrice: "Harga", colAction: "Aksi",
-          noWallet: "Wallet tidak ditemukan. Buka halaman ini di browser MetaMask, Trust Wallet atau Binance Web3 Wallet.",
-          mkNote: "Token dibeli berurutan: membeli #N juga me-mint token sebelumnya di daftar ini ke wallet kamu.",
-          toMarket: "Ke Pasar"
+          navGallery: "图库", navMarket: "市场", navKinds: "种类",
+          heroTitle: "链上代理",
+          heroSub: "来自 SEOLint World 的 10,000 个像素 SEO 代理，在 BNB Chain 上铸造。",
+          tabPrompt: "代理提示词", tabWallet: "用钱包铸造", tabKinds: "全部种类", tabLatest: "最新铸造", tabLookup: "查询钱包",
+          agentTitle: "用代理铸造", copy: "复制提示词", connect: "连接钱包",
+          supplyTitle: "10,000 个按种类分布", seeKinds: "查看全部种类 ↓",
+          kindsTitle: "全部种类", galleryTitle: "在图库中查看全部 10,000 个", all: "全部",
+          marketEyebrow: "市场 · 剩余供应", marketTitle: "从剩余供应中购买", lookupBtn: "查询",
+          mkKindsTitle: "各种类剩余", mkNextTitle: "接下来将铸造",
+          colKind: "种类", colRarity: "稀有度", colLeft: "剩余", colTotal: "总供应", colPrice: "价格", colAction: "操作",
+          noWallet: "未检测到钱包。请在 MetaMask、Trust Wallet 或 Binance Web3 钱包的浏览器中打开本页。",
+          mkNote: "代币按顺序购买：购买 #N 会同时把列表中它之前的代币铸造到你的钱包。",
+          toMarket: "前往市场"
         };
         var els = $$("[data-i18n]"), langBtn = $("#lang-btn"), isID = false;
         els.forEach(function (el) { el.setAttribute("data-en", el.textContent); });
         langBtn.addEventListener("click", function () {
           isID = !isID;
           els.forEach(function (el) { var k = el.getAttribute("data-i18n"); el.textContent = isID && ID[k] ? ID[k] : el.getAttribute("data-en"); });
-          document.documentElement.lang = isID ? "id" : "en";
-          langBtn.textContent = isID ? "EN" : "中文 / ID";
-          langBtn.setAttribute("aria-label", isID ? "Switch language to English" : "Switch language to Bahasa Indonesia");
+          document.documentElement.lang = isID ? "zh-CN" : "en";
+          langBtn.textContent = isID ? "EN" : "中文";
+          langBtn.setAttribute("aria-label", isID ? "Switch language to English" : "切换到中文");
           renderData(); drawLookup();
         });
       })();
