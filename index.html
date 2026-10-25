@@ -193,6 +193,7 @@
         <a href="#gallery" data-i18n="navGallery">Gallery</a>
         <a href="#market" data-i18n="navMarket">Market</a>
         <a href="#kinds" data-i18n="navKinds">Kinds</a>
+        <a href="#raid" data-i18n="navRaid">Raid</a>
         <button class="x-lang" type="button" id="lang-btn" aria-label="切换到中文">中文</button>
       </nav>
 
@@ -534,12 +535,61 @@
           <p class="x-small" data-i18n="mkNote">Tokens are bought in order: buying #N also mints the tokens before it in this list to your wallet.</p>
           <div class="x-notice" id="mk-tx" role="status" aria-live="polite" hidden></div>
         </section>
+
+        <section class="x-panel x-market" id="raid" data-nav="Raid" style="scroll-margin-top:80px">
+          <div style="display:grid;gap:10px">
+            <p class="x-eyebrow" data-i18n="raidEyebrow">Audit Raid · Daily game</p>
+            <h2 data-i18n="raidTitle">Send your agents on today's raid</h2>
+            <p class="x-small" data-i18n="raidLead">Every day your agents audit a new target page. Rarer kinds find bigger issues and score more. Scores add up across the week, and the top 10 wallets make the leaderboard.</p>
+          </div>
+          <div class="x-counter">
+            <p class="x-eyebrow" data-i18n="raidTarget">Today's target</p>
+            <p class="x-counter__fig" id="rd-target" style="word-break:break-all">…</p>
+            <p class="x-small" id="rd-reset"></p>
+          </div>
+          <div class="x-field">
+            <label class="x-label" for="rd-wallet" data-i18n="raidWalletLabel">Wallet to raid with</label>
+            <input class="x-input" id="rd-wallet" type="text" placeholder="0x…" autocomplete="off" spellcheck="false" />
+          </div>
+          <div class="x-prompt-row">
+            <button class="x-btn" type="button" id="rd-go" data-i18n="raidGo">Start the raid</button>
+            <button class="x-btn x-btn--ghost" type="button" id="rd-mine" data-i18n="raidMine">Use my wallet</button>
+          </div>
+          <p class="x-small" id="rd-status" role="status" aria-live="polite"></p>
+          <div id="rd-result" hidden>
+            <p class="x-counter__fig" id="rd-total"></p>
+            <p class="x-small" id="rd-bonus"></p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th scope="col">Token</th><th scope="col" data-i18n="colKind">Kind</th><th scope="col" data-i18n="colFinding">Finding</th><th scope="col" data-i18n="colScore">Score</th></tr></thead>
+                <tbody id="rd-log"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <h3 data-i18n="raidBoard">This week's leaderboard</h3>
+          <p class="x-small" id="rd-week"></p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col" data-i18n="colRank">Rank</th><th scope="col" data-i18n="colWallet">Wallet</th><th scope="col" data-i18n="colAgents">Agents</th><th scope="col" data-i18n="colScore">Score</th></tr></thead>
+              <tbody id="rd-board"><tr><th scope="row">—</th><td colspan="3" class="muted">…</td></tr></tbody>
+            </table>
+          </div>
+
+          <h3 data-i18n="raidRulesTitle">How scoring works</h3>
+          <ul class="x-facts">
+            <li data-i18n="raidR1">Base points per agent: Common 10, Uncommon 18, Rare 30, Epic 50, Legendary 90.</li>
+            <li data-i18n="raidR2">Each day every agent rolls 0.5× to 1.5× on its base. A roll of 1.4× or more is a critical find.</li>
+            <li data-i18n="raidR3">Hold all 8 kinds and the whole wallet scores +25%.</li>
+            <li data-i18n="raidR4">The week runs Monday to Sunday (UTC) and is scored from the agents each wallet holds now. Results are worked out from public chain data, so anyone can check them.</li>
+          </ul>
+        </section>
       </main>
 
       <footer class="x-foot">
         <p><strong>SEOLint World</strong> · Pixel SEO agents onchain. Prices and limits are the contract's own; this page only reads the chain and asks your wallet to send.</p>
         <p data-contract-line>Contract: <a href="https://bscscan.com/address/0x438d4b4a867cDA7e8B1F673b5db7D8C5024493E1" target="_blank" rel="noopener">0x438d…93E1 ↗</a></p>
-        <nav aria-label="Back to sections"><a href="#top">Top</a><a href="#kinds">Kinds</a><a href="#gallery">Gallery</a><a href="#market">Market</a></nav>
+        <nav aria-label="Back to sections"><a href="#top">Top</a><a href="#kinds">Kinds</a><a href="#gallery">Gallery</a><a href="#market">Market</a><a href="#raid">Raid</a></nav>
       </footer>
     </div>
     <div class="x-toast" id="toast" role="status" aria-live="polite"></div>
@@ -1103,7 +1153,157 @@
           })(id);
         }
 
-        function renderData() { renderMarket(); renderLatest(); renderGallery(); }
+
+        /* ===== Audit Raid: daily game, scored deterministically from chain data ===== */
+        var RAID = {
+          base: [10, 10, 18, 18, 30, 30, 50, 90],
+          sites: ["shop.example", "docs.example", "news.example", "travel.example", "food.example", "saas.example", "music.example", "games.example"],
+          paths: ["/pricing", "/blog/launch", "/products/sneakers", "/about", "/help/faq", "/category/sale", "/checkout", "/careers"],
+          finds: [
+            [["Broken link in the main menu", "主菜单中有失效链接"], ["Orphan page with no internal links", "没有内部链接的孤立页面"], ["Redirect chain of 4 hops", "4 次跳转的重定向链"]],
+            [["Missing meta description", "缺少 meta 描述"], ["Title over 60 characters", "标题超过 60 个字符"], ["Duplicate title tag", "重复的标题标签"]],
+            [["Invalid Product schema", "Product 结构化数据无效"], ["FAQ markup missing", "缺少 FAQ 标记"], ["Breadcrumb schema broken", "面包屑结构化数据损坏"]],
+            [["Toxic backlink flagged", "发现有害外链"], ["Lost backlink recovered", "找回丢失的外链"], ["Anchor text over-optimised", "锚文本过度优化"]],
+            [["LCP 4.1s on mobile", "移动端 LCP 4.1 秒"], ["Layout shift from ad slot", "广告位导致布局偏移"], ["INP 380ms on checkout", "结账页 INP 380 毫秒"]],
+            [["Canonical points to a 404", "canonical 指向 404"], ["http and https both indexed", "http 与 https 同时被收录"], ["Self-canonical missing", "缺少自引用 canonical"]],
+            [["12 URLs missing from sitemap", "站点地图缺少 12 个 URL"], ["Sitemap lists a noindex page", "站点地图包含 noindex 页面"], ["Sitemap not in robots.txt", "robots.txt 未声明站点地图"]],
+            [["robots.txt blocked /shop after deploy", "部署后 robots.txt 屏蔽了 /shop"], ["noindex shipped to production", "noindex 被发布到生产环境"], ["hreflang removed in last release", "上次发布删除了 hreflang"]]
+          ],
+          owners: {}, scanned: 0, loading: null, last: null, boardSig: ""
+        };
+        function rhash(str) {
+          var h = 2166136261 >>> 0;
+          for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+          h ^= h >>> 15; h = Math.imul(h, 2246822507) >>> 0; h ^= h >>> 13; return h >>> 0;
+        }
+        function utcDay(t) { return Math.floor((t || Date.now()) / 86400000); }
+        function dayLabel(d) { return new Date(d * 86400000).toISOString().slice(0, 10); }
+        function weekStart(d) { var dow = (new Date(d * 86400000).getUTCDay() + 6) % 7; return d - dow; }
+        function raidTarget(d) { var h = rhash("target:" + d); return RAID.sites[h % 8] + RAID.paths[(h >>> 8) % 8]; }
+        function agentRoll(d, id) {
+          var h = rhash("raid:" + d + ":" + id), roll = 0.5 + (h % 1001) / 1000, k = kindOf(id);
+          return { id: id, k: k, roll: roll, crit: roll >= 1.4, pts: Math.round(RAID.base[k] * roll), find: RAID.finds[k][(h >>> 12) % 3] };
+        }
+        function walletDay(ids, d) {
+          var kinds = {}, sum = 0, rows = ids.map(function (id) { var a = agentRoll(d, id); kinds[a.k] = 1; sum += a.pts; return a; });
+          var set = Object.keys(kinds).length === 8;
+          return { rows: rows, set: set, total: set ? Math.round(sum * 1.25) : sum };
+        }
+        function scanOwners() {
+          var s = W.supply === null ? null : Number(W.supply);
+          if (s === null) return Promise.reject(new Error("supply"));
+          if (RAID.scanned >= s) return Promise.resolve(RAID.owners);
+          if (RAID.loading) return RAID.loading;
+          var next = RAID.scanned + 1, conc = 8;
+          function worker() {
+            if (next > s) return Promise.resolve();
+            var id = next++;
+            return rawRead(SEL.ownerOf + encUint(id)).then(function (r) { RAID.owners[id] = ("0x" + r.slice(26, 66)).toLowerCase(); })
+              .catch(function () {}).then(worker);
+          }
+          var ws = []; for (var i = 0; i < conc; i++) ws.push(worker());
+          RAID.loading = Promise.all(ws).then(function () { RAID.scanned = s; RAID.loading = null; return RAID.owners; });
+          return RAID.loading;
+        }
+        function holdings() {
+          var by = {};
+          Object.keys(RAID.owners).forEach(function (id) { var o = RAID.owners[id]; (by[o] = by[o] || []).push(+id); });
+          return by;
+        }
+        function renderRaidHead() {
+          var d = utcDay();
+          $("#rd-target").textContent = raidTarget(d);
+          var ms = (d + 1) * 86400000 - Date.now(), h = Math.floor(ms / 3600000), m = Math.floor(ms % 3600000 / 60000);
+          $("#rd-reset").textContent = L("New target in " + h + "h " + m + "m (00:00 UTC) · Day " + dayLabel(d), "距下一个目标还有 " + h + " 小时 " + m + " 分（UTC 00:00）· " + dayLabel(d));
+          var ws = weekStart(d);
+          $("#rd-week").textContent = L("Week of " + dayLabel(ws) + " to " + dayLabel(ws + 6) + " (UTC), day " + (d - ws + 1) + " of 7.", "本周 " + dayLabel(ws) + " 至 " + dayLabel(ws + 6) + "（UTC），第 " + (d - ws + 1) + " / 7 天。");
+        }
+        function renderRaidResult() {
+          var box = $("#rd-result"), r = RAID.last;
+          if (!r) { box.hidden = true; return; }
+          box.hidden = false;
+          var d = utcDay(), res = walletDay(r.ids, d), log = $("#rd-log");
+          $("#rd-total").textContent = L("Today: " + fmtN(res.total) + " pts", "今日：" + fmtN(res.total) + " 分");
+          $("#rd-bonus").textContent = (res.set ? L("All 8 kinds held: +25% set bonus. ", "集齐 8 种：全队 +25%。") : L("Collect all 8 kinds for a +25% set bonus. ", "集齐 8 种可获得 +25% 加成。")) +
+            (r.rank ? L("Weekly rank #" + r.rank + " with " + fmtN(r.week) + " pts.", "本周排名第 " + r.rank + "，共 " + fmtN(r.week) + " 分。") : "");
+          log.textContent = "";
+          res.rows.sort(function (a, b) { return b.pts - a.pts; }).forEach(function (a) {
+            var tr = el("tr"), th = el("th", null, "#" + a.id); th.scope = "row"; tr.appendChild(th);
+            var tk = el("td"); tk.appendChild(kcell(a.k)); tr.appendChild(tk);
+            tr.appendChild(el("td", null, (a.crit ? L("CRITICAL · ", "暴击 · ") : "") + L(a.find[0], a.find[1])));
+            tr.appendChild(el("td", "num", fmtN(a.pts)));
+            log.appendChild(tr);
+          });
+          labelRows(log);
+        }
+        function boardData() {
+          var d = utcDay(), ws = weekStart(d), by = holdings();
+          return Object.keys(by).map(function (o) {
+            var ids = by[o], sum = 0;
+            for (var x = ws; x <= d; x++) sum += walletDay(ids, x).total;
+            return { o: o, n: ids.length, s: sum };
+          }).sort(function (a, b) { return b.s - a.s || b.n - a.n; });
+        }
+        function renderBoard() {
+          var tb = $("#rd-board"), s = W.supply === null ? null : Number(W.supply);
+          function msg(t) { tb.textContent = ""; var tr = el("tr"), th = el("th", null, "—"); th.scope = "row"; tr.appendChild(th); var td = el("td", "muted", t); td.colSpan = 3; tr.appendChild(td); tb.appendChild(tr); }
+          if (s === null) return msg(L("Reading the chain…", "正在读取链上数据…"));
+          if (s === 0) return msg(L("No agents minted yet. Mint one to take the top spot.", "还没有代理被铸造。铸造一个即可登顶。"));
+          if (RAID.scanned < s) return msg(L("Loading holders…", "正在加载持有者…"));
+          var list = boardData().slice(0, 10), me = W.account ? W.account.toLowerCase() : "";
+          tb.textContent = "";
+          list.forEach(function (r, i) {
+            var tr = el("tr"), th = el("th", null, "#" + (i + 1)); th.scope = "row"; tr.appendChild(th);
+            var tw = el("td"), a = el("a", null, short(r.o) + (r.o === me ? L(" (you)", "（你）") : "")); a.href = EXPLORER + "/address/" + r.o; a.target = "_blank"; a.rel = "noopener"; tw.appendChild(a); tr.appendChild(tw);
+            tr.appendChild(el("td", "num", fmtN(r.n)));
+            tr.appendChild(el("td", "num", fmtN(r.s)));
+            tb.appendChild(tr);
+          });
+          labelRows(tb);
+        }
+        function loadBoard() {
+          renderBoard();
+          if (W.supply === null || Number(W.supply) === 0) return;
+          scanOwners().then(renderBoard).catch(function () {});
+        }
+        function startRaid() {
+          var v = $("#rd-wallet").value.trim(), st = $("#rd-status");
+          if (!/^0x[0-9a-fA-F]{40}$/.test(v)) { st.textContent = L("Enter a full 0x address (42 characters).", "请输入完整的 0x 地址（42 个字符）。"); return; }
+          if (W.supply === null) { st.textContent = L("Reading the chain… try again in a moment.", "正在读取链上数据…请稍后再试。"); return; }
+          st.textContent = L("Your agents are crawling the target…", "你的代理正在审计目标…");
+          scanOwners().then(function () {
+            var w = v.toLowerCase(), ids = holdings()[w] || [];
+            if (!ids.length) { RAID.last = null; renderRaidResult(); st.textContent = L("This wallet holds no agents yet. Mint one in the Market to join the raid.", "该钱包还没有代理。去市场铸造一个即可参加突袭。"); return; }
+            var board = boardData(), rank = 0, week = 0;
+            board.forEach(function (r, i) { if (r.o === w) { rank = i + 1; week = r.s; } });
+            RAID.last = { w: w, ids: ids.sort(function (a, b) { return a - b; }), rank: rank, week: week };
+            st.textContent = L(ids.length + " agent" + (ids.length === 1 ? "" : "s") + " raided " + raidTarget(utcDay()) + ".", ids.length + " 个代理突袭了 " + raidTarget(utcDay()) + "。");
+            renderRaidResult(); renderBoard();
+          }).catch(function () { st.textContent = L("Couldn't read the chain. Try again in a moment.", "无法读取链上数据，请稍后再试。"); });
+        }
+        $("#rd-go").addEventListener("click", startRaid);
+        $("#rd-mine").addEventListener("click", function () {
+          if (W.account) { $("#rd-wallet").value = W.account; startRaid(); return; }
+          if (!eth) { $("#rd-status").textContent = L("No wallet found. Open this page inside MetaMask, Trust Wallet or Binance Web3 Wallet's browser.", "未检测到钱包。请在 MetaMask、Trust Wallet 或 Binance Web3 钱包的浏览器中打开本页。"); return; }
+          eth.request({ method: "eth_requestAccounts" }).then(function (acc) {
+            if (acc && acc[0]) { W.account = acc[0]; $("#rd-wallet").value = acc[0]; refresh(); startRaid(); }
+          }).catch(function (e) { $("#rd-status").textContent = errMsg(e); });
+        });
+        var raidSupply = null;
+        function renderRaid() {
+          if (!RAID || !raidReady) return;
+          renderRaidHead();
+          if (W.account && !$("#rd-wallet").value) $("#rd-wallet").value = W.account;
+          var s = W.supply === null ? null : String(W.supply);
+          if (s !== raidSupply) { raidSupply = s; loadBoard(); }
+          else renderBoard();
+          renderRaidResult();
+        }
+        var raidReady = true;
+        setInterval(renderRaidHead, 60000);
+        renderRaid();
+
+        function renderData() { renderMarket(); renderLatest(); renderGallery(); renderRaid(); }
 
         /* contract address lines */
         $$("[data-contract-line]").forEach(function (el) {
@@ -1135,7 +1335,9 @@
 
         /* page language: EN / 中文 */
         var ID = {
-          navGallery: "图库", navMarket: "市场", navKinds: "种类",
+          navGallery: "图库", navMarket: "市场", navKinds: "种类", navRaid: "突袭",
+          raidEyebrow: "审计突袭 · 每日游戏", raidTitle: "派你的代理参加今日突袭", raidLead: "每天你的代理都会审计一个新的目标页面。越稀有的种类发现的问题越大、得分越高。分数按周累计，前 10 名钱包登上排行榜。", raidTarget: "今日目标", raidWalletLabel: "参加突袭的钱包", raidGo: "开始突袭", raidMine: "使用我的钱包", raidBoard: "本周排行榜", raidRulesTitle: "计分规则", colFinding: "发现", colScore: "得分", colRank: "排名", colWallet: "钱包", colAgents: "代理",
+          raidR1: "每个代理的基础分：普通 10、罕见 18、稀有 30、史诗 50、传说 90。", raidR2: "每天每个代理在基础分上随机获得 0.5× 到 1.5× 倍率，1.4× 及以上为暴击。", raidR3: "集齐全部 8 种，整个钱包得分 +25%。", raidR4: "每周从周一到周日（UTC），按每个钱包当前持有的代理计分。结果由公开链上数据计算，任何人都可以核对。",
           heroTitle: "链上代理",
           heroSub: "来自 SEOLint World 的 10,000 个像素 SEO 代理，在 BNB Chain 上铸造。",
           tabPrompt: "代理提示词", tabWallet: "用钱包铸造", tabKinds: "全部种类", tabLatest: "最新铸造", tabLookup: "查询钱包",
