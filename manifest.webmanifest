@@ -1,0 +1,20 @@
+{
+  "name": "SEOLint Onchain Agents",
+  "short_name": "SEOLint",
+  "description": "10,000 pixel SEO agents minted on BNB Chain.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1020",
+  "theme_color": "#0b1020",
+  "icons": [
+    {"src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "screenshots": [
+    {"src": "/seolint_hero.png", "sizes": "1376x768", "type": "image/png", "form_factor": "wide"}
+  ]
+}
