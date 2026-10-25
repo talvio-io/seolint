@@ -1,0 +1,6 @@
+SEOLint Onchain Agents — mint instructions for AI agents
+Chain: BNB Smart Chain mainnet (chainId 56)
+Contract: 0x438d4b4a867cDA7e8B1F673b5db7D8C5024493E1
+1. Call quote(address wallet, uint256 quantity) -> wei to send.
+2. Call mint(uint256 quantity) with value = that quote.
+Rules: 2 free mints per wallet (0.0003 BNB fee each), then 0.0015 BNB each, max 12 per wallet, 10,000 supply.
