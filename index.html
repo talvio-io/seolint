@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" translate="no">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -177,6 +177,7 @@
       .x-foot nav { display: flex; flex-wrap: wrap; gap: 4px; }
       .x-foot nav a { color: var(--x-ink); display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap); min-width: var(--tap); padding: 0 8px; }
     </style>
+    <meta name="google" content="notranslate">
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#0b1020">
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
@@ -1038,7 +1039,7 @@
             btn.setAttribute("aria-label", L("Buy up to #" + id, "Beli sampai #" + id));
             if (a === null) {
               tp.className = "";
-              tp.textContent = L("0.0015 BNB (first 2: fee 0.0003 BNB)", "0.0015 BNB (2 pertama: fee 0.0003 BNB)");
+              tp.appendChild(el("span", null, L("0.0015 BNB (first 2: fee 0.0003 BNB)", "0.0015 BNB (2 pertama: fee 0.0003 BNB)")));
               btn.addEventListener("click", function () { connect(mkBox); });
             } else if (k > a) {
               tp.textContent = "—"; btn.disabled = true; btn.textContent = L("Limit 12 per wallet", "Batas 12 per wallet"); btn.removeAttribute("aria-label");
