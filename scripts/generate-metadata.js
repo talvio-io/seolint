@@ -24,12 +24,11 @@ const out = path.join(__dirname, '..', 'metadata');
 fs.mkdirSync(out, { recursive: true });
 for (let id = 1; id <= 10000; id++) {
   const [, name, img, rarity] = kindOf(id);
-  fs.writeFileSync(path.join(out, `${id}`), JSON.stringify({
+  fs.writeFileSync(path.join(out, `${id}.json`), JSON.stringify({
     name: `SEOLint Agent #${id}`,
     description: 'Pixel SEO agent of SEOLint World, minted on BNB Smart Chain.',
     image: site + img,
     attributes: [{ trait_type: 'Kind', value: name }, { trait_type: 'Rarity', value: rarity }],
   }));
-  fs.copyFileSync(path.join(out, `${id}`), path.join(out, `${id}.json`));
 }
 console.log('Wrote 10,000 metadata files to /metadata');
