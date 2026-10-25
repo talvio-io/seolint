@@ -1,0 +1,24 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEOLint Agents · Owner</title>
+<style>body{background:#0b1020;color:#e8ecff;font-family:system-ui,sans-serif;max-width:520px;margin:40px auto;padding:0 20px}
+h1{color:#b6ff3b;font-size:22px}button{background:#b6ff3b;color:#0b1020;border:0;padding:14px 18px;font-weight:700;font-size:16px;border-radius:6px;width:100%;margin:8px 0}
+code{word-break:break-all;color:#b6ff3b}#log{margin-top:16px;white-space:pre-wrap;font-size:14px}a{color:#7fd3ff}</style></head>
+<body><h1>SEOLint Agents · Owner panel</h1>
+<p>Kontrak: <code>0x438d4b4a867cDA7e8B1F673b5db7D8C5024493E1</code></p>
+<p>Set metadata ke <code>https://seolint.xyz/metadata/</code> (hanya wallet owner).</p>
+<button id="c">1. Connect wallet</button><button id="s">2. Set metadata (setBaseURI)</button><button id="w">Withdraw hasil mint</button>
+<div id="log"></div>
+<script>
+const C="0x438d4b4a867cDA7e8B1F673b5db7D8C5024493E1",OWNER="0x6961875eaf8418ced84bc433e6a17c1e3d0301c7";
+const DATA="0x55f804b30000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001d68747470733a2f2f73656f6c696e742e78797a2f6d657461646174612f000000";
+let acc;const log=t=>document.getElementById('log').textContent=t;
+async function connect(){if(!window.ethereum){log("Wallet tidak ditemukan. Buka halaman ini di browser MetaMask / Trust Wallet.");return}
+acc=(await ethereum.request({method:'eth_requestAccounts'}))[0];
+try{await ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]})}catch(e){if(e.code===4902)await ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:'0x38',chainName:'BNB Smart Chain',nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18},rpcUrls:['https://bsc-dataseed.binance.org/'],blockExplorerUrls:['https://bscscan.com']}]})}
+log("Terhubung: "+acc+(acc.toLowerCase()===OWNER?" (owner ✓)":" — BUKAN wallet owner"));}
+async function send(data,label){if(!acc)await connect();if(!acc)return;
+try{const h=await ethereum.request({method:'eth_sendTransaction',params:[{from:acc,to:C,data}]});log(label+" terkirim: "+h+"\nhttps://bscscan.com/tx/"+h)}catch(e){log("Gagal: "+(e.message||e))}}
+document.getElementById('c').onclick=connect;
+document.getElementById('s').onclick=()=>send(DATA,"setBaseURI");
+document.getElementById('w').onclick=()=>send("0x3ccfd60b","withdraw");
+</script></body></html>
